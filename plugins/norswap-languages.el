@@ -6,7 +6,7 @@
 ;; Fontify (color) only comments, strings, preprocessor directives and functions
 ;; names in some languages. I disabled all of those but comments via the text
 ;; interface. See the (set-custom-faces) section of the automatically generated
-;; part of .emacs.
+;; part of init.el.
 (setq font-lock-maximum-decoration 1)
 
 ;;;;; Lisp ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -41,6 +41,14 @@
     (set (make-local-variable 'compile-command)
         (concat "python " (buffer-name)))
     (define-key python-mode-map (kbd "C-c C-c") 'comment-region)))
+
+;;;;; CMake ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'cmake-mode)
+(setq auto-mode-alist
+      (append '(("CMakeLists\\.txt\\'" . cmake-mode)
+                ("\\.cmake\\'" . cmake-mode))
+              auto-mode-alist))
 
 ;;;;; OZ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

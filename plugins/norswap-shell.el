@@ -4,6 +4,13 @@
 
 ;; Clear console.
 (define-key shell-mode-map (kbd "C-l") 'clear-console)
+(add-hook 'eshell-mode-hook (lambda ()
+    (define-key eshell-mode-map (kbd "C-l") (lambda () (interactive)
+        (setq inhibit-read-only t)
+        (erase-buffer)
+        (eshell-send-input)
+        (setq inhibit-read-only nil)
+))))
 
 ;; Sync shell with file system (in case of completion problems).
 (define-key shell-mode-map (kbd "C-c r") 'shell-resync-dirs)
