@@ -53,6 +53,9 @@
 ;; Exchange the buffer with the one on the right (wraps over).
 (global-set-key (kbd "C-x x")   'swap-buffer)
 
+;; Delete current buffer and current file (asks confirmation).
+(global-set-key (kbd "C-c k")   'delete-this-buffer-and-file)
+
 (require 'buffer-move)
 ;; Wraps directions around for buffer displacement.
 (setq windmove-wrap-around t)

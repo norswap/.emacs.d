@@ -33,7 +33,7 @@
 
 ;;;;; Custom shell. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq nshell-default-dir "c:/h/Dropbox/code")
+(setq nshell-default-dir "c:/h/")
 (setq nshell-counter 0)
 
 (defun nshell ()
