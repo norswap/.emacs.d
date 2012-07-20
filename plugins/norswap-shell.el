@@ -5,7 +5,8 @@
 ;; Override norwap-keys for clear-console.
 (defvar shell-override (make-keymap))
 (define-minor-mode shell-override-minor-mode "" nil "" shell-override)
-(define-key shell-override (kbd "C-l")      'clear-console)
+(define-key shell-override (kbd "C-l") 'clear-console)
+(define-key shell-override (kbd "C-c C-c") 'interrupt-shell-process)
 (add-hook 'shell-mode-hook (lambda () (shell-override-minor-mode 1)))
 (add-hook 'eshell-mode-hook (lambda () (shell-override-minor-mode 1)))
 
@@ -20,8 +21,14 @@
   (if (eq major-mode 'shell-mode)
     (comint-send-input)
     (eshell-send-input))
-  (setq inhibit-read-only t)
-)
+  (setq inhibit-read-only t))
+
+(defun interrupt-shell-process ()
+  "Interrupts a shell process according to shell type (regular or eshell)."
+  (interactive)
+  (if (eq major-mode 'shell-mode)
+    (eshell-interrupt-process)
+    (comint-interrupt-subjob)))
 
 ;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
