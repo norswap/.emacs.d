@@ -71,6 +71,13 @@ boundaries is set to black."
     (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
     (ad-activate 'isearch-search)))
 
+(defadvice kill-new (before kill-push-clipboard activate)
+  "Before putting new kill onto the kill-ring, add the clipboard/external
+   selection to the kill ring"
+  (let ((have-paste (and interprogram-paste-function
+                         (funcall interprogram-paste-function))))
+    (when have-paste (push have-paste kill-ring))))
+
 ;; Automatically recompile .el files wich have already been compiled.
 (defun auto-recompile-el-buffer ()
   (interactive)
