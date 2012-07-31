@@ -27,8 +27,8 @@
   "Interrupts a shell process according to shell type (regular or eshell)."
   (interactive)
   (if (eq major-mode 'shell-mode)
-    (eshell-interrupt-process)
-    (comint-interrupt-subjob)))
+    (comint-interrupt-subjob)
+    (eshell-interrupt-process)))
 
 ;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

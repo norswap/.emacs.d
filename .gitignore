@@ -1,0 +1,7 @@
+.*
+!.gitignore
+autosave
+backup
+server
+tramp
+eshell
