@@ -183,6 +183,9 @@ boundaries is set to black."
 Emacs, by setting process-list to nil before exiting."
   (flet ((process-list nil)) ad-do-it))
 
+;; Disable version control support in emacs. Things now load much faster !
+(setq vc-handled-backends ())
+
 ;;;;; Indentation. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Tabs are insert as spaces.
