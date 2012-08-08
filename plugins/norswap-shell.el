@@ -7,8 +7,12 @@
 (define-minor-mode shell-override-minor-mode "" nil "" shell-override)
 (define-key shell-override (kbd "C-l") 'clear-console)
 (define-key shell-override (kbd "C-c C-c") 'interrupt-shell-process)
-(add-hook 'shell-mode-hook (lambda () (shell-override-minor-mode 1)))
-(add-hook 'eshell-mode-hook (lambda () (shell-override-minor-mode 1)))
+(defun shell-mode-hook-function ()
+  (shell-override-minor-mode 1)
+  (make-local-variable 'inhibit-read-only)
+)
+(add-hook 'shell-mode-hook  'shell-mode-hook-function)
+(add-hook 'eshell-mode-hook 'shell-mode-hook-function)
 
 ;; Sync shell with file system (in case of completion problems).
 (define-key shell-mode-map (kbd "C-c r") 'shell-resync-dirs)
@@ -21,7 +25,7 @@
   (if (eq major-mode 'shell-mode)
     (comint-send-input)
     (eshell-send-input))
-  (setq inhibit-read-only t))
+  (setq inhibit-read-only nil))
 
 (defun interrupt-shell-process ()
   "Interrupts a shell process according to shell type (regular or eshell)."
