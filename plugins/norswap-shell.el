@@ -14,6 +14,16 @@
 (add-hook 'shell-mode-hook  'shell-mode-hook-function)
 (add-hook 'eshell-mode-hook 'shell-mode-hook-function)
 
+;; There are currently a few issues here.
+;;
+;; - shell-resync-dirs does not work with msys bash because of the path
+;;   format (/c/stuff/thing instead of c:/stuff/thing)
+;;
+;; - with bash, comint-interrupt-subjob won't kill some processes, but the
+;;   stronger comint-kill-subjob will kill the shell (note that for analogous
+;;   eshell cases, replace (eshell-interrupt-process) with (kill-process nil
+;;   comint-ptyp), taken from the source for comint-kill-subjob, does the trick)
+
 ;; Sync shell with file system (in case of completion problems).
 (define-key shell-mode-map (kbd "C-c r") 'shell-resync-dirs)
 
@@ -32,12 +42,15 @@
   (interactive)
   (if (eq major-mode 'shell-mode)
     (comint-interrupt-subjob)
-    (eshell-interrupt-process)))
+    (kill-process nil comint-ptyp)))
 
 ;;;;; Tweaks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Do not fill text in shell mode.
 (add-hook 'comint-mode-hook (lambda () (auto-fill-mode nil)))
+
+;; Put eshell files in this directory.
+(setq eshell-directory-name (concat user-emacs-directory "eshell"))
 
 ;; In $HOME, put in ".bashrc" (or equivalent):
 ;; export PS1='\e[33m\w\n\e[32m$\e[00m '
