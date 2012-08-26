@@ -31,14 +31,14 @@
 
 (defface visible-mark-face
   `((((type tty) (class color))
-     (:background "gray" :foreground "white"))
+     (:background "green" :foreground "black"))
     (((type tty) (class mono))
      (:inverse-video t))
     (((class color) (background dark))
-     (:background "gray"))
+     (:background "blue"))
     (((class color) (background light))
-     (:background "grey80"))
-    (t (:background "gray")))
+     (:background "grey"))
+    (t (:background "pink")))
   "Face for the mark."
   :group 'visible-mark)
 
@@ -82,7 +82,7 @@
                                 :underline t)
             (push symbol faces)))
         (setq visible-mark-non-trailing-faces (nreverse faces)))))
-                  
+
 (defun visible-mark-initialize-overlays ()
   (mapcar 'delete-overlay visible-mark-overlays)
   (let (overlays)

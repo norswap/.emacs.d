@@ -95,6 +95,9 @@ boundaries is set to black."
     '(setq tramp-debug-buffer t)
 )
 
+;; Ignore case in filename completion (defaults to nil on Unix).
+(setq read-file-name-completion-ignore-case t)
+
 ;; Allow copy-pasting of files in dired.
 (require 'dired-copy-paste)
 
