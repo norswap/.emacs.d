@@ -101,6 +101,9 @@ boundaries is set to black."
 ;; Allow copy-pasting of files in dired.
 (require 'dired-copy-paste)
 
+;; Better undo workflow.
+(require 'undo-tree)
+
 ;;;;; Mark ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Disable transient mark : the region is always active and not highlighted. It

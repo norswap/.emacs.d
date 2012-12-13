@@ -51,6 +51,7 @@
 (require 'norswap-interface)
 (require 'norswap-shell)
 (require 'norswap-languages)
+(require 'norswap-backwards)
 (if (eq system-type 'windows-nt)
     (require 'norswap-windows)
     (require 'norswap-unix))

@@ -23,15 +23,18 @@
 
 ;; C-k                          'kill-line          cut to end of line
 ;; C-w                          'kill-region        cut
+;; M-w                          'kill-ring-save     copy
 ;; C-y                          'yank               paste
 ;; M-y                          'yank-pop           replace paste by older paste
 (norswap-key (kbd "M-S-y")   'reverse-yank-pop); replace paste by newer paste
 (norswap-key (kbd "C-c y")   'paste-below);      insert a newline then paste
-(norswap-key (kbd "C-j")     'kill-ring-save);   copy
-(norswap-key (kbd "M-w")     'delete-region)
+(norswap-key (kbd "C-j")     'delete-region)
 (norswap-key (kbd "C-c s")   'select-line)
 (norswap-key (kbd "C-c d")   'select-paragraph)
 (norswap-key (kbd "C-c f")   'select-word)
+
+; dirty fix
+(norswap-key (kbd "C-c C-n") 'TeX-command-master)
 
 ;;;;; Moving around in the file. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

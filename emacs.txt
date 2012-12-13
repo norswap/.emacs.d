@@ -168,6 +168,13 @@ C-x ret f   : set file coding
 M-x desktop-clear  && var : desktop-clear-preserve-buffers-regexp
 
 C-x u   : undo
+  undo-tree visualize
+
+C-z : (c) undo
+C-x C-z : undo-tree-redo
+C-x r u : undo-tree-save-state-to-register
+C-x r U : undo-tree-restore-state-from-register
+
 
 C-x C-+ : augment font size
 C-x C-- : reduce font size
@@ -215,6 +222,8 @@ eshell: M-? : pcomplete-list
 
 variable: require-final-newline : set to nil to disable adding a final
   in current buffer
+
+M-x font-lock-fontify-buffer : recolor buffer
 
 % ---- Prefix Argument ---------------------------------------------------------
 
@@ -420,6 +429,7 @@ M-x kill-all-abbrevs
 % ---- Auctex ------------------------------------------------------------------
 
 C-c C-c     : run command
+  (TeX-command-master)
 C-c C-t C-p : TeX-PDF-mode
 
 % ---- Bash --------------------------------------------------------------------
