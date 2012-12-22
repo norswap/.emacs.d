@@ -39,8 +39,4 @@
     '(setq tramp-default-method "plink")
 )
 
-;; Starts the server (allows to open all files with a single instance of emacs).
-;; On unix this feature uses the --daemon flag.
-(server-start)
-
 (provide 'norswap-windows)

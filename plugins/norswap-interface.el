@@ -1,5 +1,5 @@
 ;; This file requires:
-;; color-theme, window-number, unbound, uniquify, visible-mark, lacarte
+;; uniquify, visible-mark, dired-copy-paste
 
 ;;;;; Visual ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -9,23 +9,6 @@
 ;; Smaller font, more spacing.
 (set-face-attribute 'default nil :height 90)
 (setq-default line-spacing 4)
-
-(add-to-list 'load-path
-  (concat user-emacs-directory "plugins/color-theme-6.6.0"))
-(require 'color-theme)
-(setq color-theme-is-global t) ;; Set color theme on all frames.
-(color-theme-initialize)
-(defun color-std ()
-    "Sets the billw theme (a dark theme). The space between text and window
-boundaries is set to black."
-    (interactive)
-    (color-theme-billw)
-    (set-face-attribute 'fringe nil
-                        :width 'ultra-condensed :background "black")
-    (set-face-attribute 'vertical-border nil
-                        :width 'ultra-condensed :foreground "black")
-)
-(color-std)
 
 ;;;;; More information. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -38,18 +21,6 @@ boundaries is set to black."
 ;; Display trailing whitespace.
 ;; Disable with 'toggle-trailing-whitespace-display.
 (setq show-trailing-whitespace t)
-
-;; For some reason, had to uncomment the definition of "window-number-face" in
-;; the source file, or *Messages* would spout errors.
-(require 'window-number)
-;; Use M-<num> to switch to a window.
-(window-number-meta-mode 1)
-;; Display the window number in the mode-line.
-(window-number-mode 1)
-
-;; Allows to see unbound keys. Invoke with "M-x describe-unbound-keys".
-;; For interesting keybinds, use a max complexity of 5.
-(require 'unbound)
 
 ;;;;; Extended functionality. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -100,9 +71,6 @@ boundaries is set to black."
 
 ;; Allow copy-pasting of files in dired.
 (require 'dired-copy-paste)
-
-;; Better undo workflow.
-(require 'undo-tree)
 
 ;;;;; Mark ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -172,9 +140,6 @@ boundaries is set to black."
 ;; Disable menu-bar (we don't need file->this or buffers->that, we're a one man
 ;; command-line commando !).
 (menu-bar-mode -1)
-
-;; In case a menu item needs to be accessed. Invoke with "lacarte-e-m".
-(require 'lacarte)
 
 ;; Activate winner mode : use C-c left and C-c right to navigate the various
 ;; window setup you used, in chronological order.

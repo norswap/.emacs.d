@@ -16,6 +16,9 @@ To install
 - [Windows] Symlink or copy `emacs.bat` to your emacs install directory, and run
   emacs via this file.
 
+Note: to make symlink on Windows, use [[LinkShellExtension (aka
+HardLinkShellExt)|http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html]].
+
 TODO: put more stuff in the README
 
   - how to open files w/o extensions with emacs by default in Windows

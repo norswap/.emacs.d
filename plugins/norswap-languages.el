@@ -1,5 +1,3 @@
-;; This file requires:
-;; highlight-parentheses
 
 ;;;;; All languages. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -13,12 +11,13 @@
 
 (define-key emacs-lisp-mode-map (kbd "C-t") 'find-function)
 
-;; Parentheses highlight. I changed colors to
-;; '("LimeGreen" "firebrick1" "DodgerBlue1" "LightGoldenrod")
-(autoload 'highlight-parentheses-mode "highlight-parentheses.el")
-(add-hook 'emacs-lisp-mode-hook 'highlight-parentheses-mode)
-(add-hook 'lisp-mode-hook 'highlight-parentheses-mode)
-(add-hook 'lisp-interaction-hook 'highlight-parentheses-mode)
+;; elpa: highlight-parentheses
+(add-hook 'emacs-lisp-mode-hook     'highlight-parentheses-mode)
+(add-hook 'lisp-mode-hook           'highlight-parentheses-mode)
+(add-hook 'lisp-interaction-hook    'highlight-parentheses-mode)
+
+(set-variable 'hl-paren-colors
+    '("LimeGreen" "firebrick1" "DodgerBlue1" "LightGoldenrod"))
 
 ;;;;; C-like languages. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -44,7 +43,7 @@
 
 ;;;;; CMake ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'cmake-mode)
+;; elpa: cmake-mode
 (setq auto-mode-alist
       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
                 ("\\.cmake\\'" . cmake-mode))

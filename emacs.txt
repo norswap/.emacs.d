@@ -1,164 +1,177 @@
 % ---- Buffers -----------------------------------------------------------------
 
-C-x s   : save all (asks for all)
-    !   = save this and all following
-    RET = terminate
-    .   = save only this
-    d   = diff buffer and file
+C-x s                       : save current (force if unsaved)
+C-x C-w                     : save as
+C-x C-q                     : toggle read-only
 
-C-x C-v RET : find alternate file (use to refresh buffer)
-M-x revert-buffer : proper way to refresh a buffer
+C-x b                       : open buffer
+    C-r/C-s (iswitch)       : next/previous buffer in list
 
-C-x C-s : save current (force if unsaved)
-C-x C-w : save as
-C-x C-q : toggle read-only
+C-x C-b                     : list buffers (mine instead: open buffer)
+C-x k                       : kill buffer
+C-x C-f                     : open/create file
+C-x C-r                     : open file read only
+C-x C-v                     : kill buffer then open file
+C-x C-c                     : exit (will ask for each file to save, C-h = help)
 
-M-x recover-file : recover autosave information
-M-x diff : diff files, by default current buffer file and its latest backup
-M-x diff-buffer-with-file : diff current buffer with its file
+C-x left                    : switch to previous buffer
+C-x right                   : switch to next buffer
 
-C-x b   : open buffer
-C-x k   : kill buffer
-C-x C-f : open/create file
-C-x C-v : kill buffer then open file
-C-x C-b : show buffer list
-C-x C-c : exit (will ask for save)
+C-x C-v RET                 : find alternate file (use to refresh buffer)
+M-x ibuffer                 : operate on multiple buffers, h for help
+M-x make-directory RET      : create path of opened file
 
-M-x make-directory : create path of opened file
-C-r/C-s (iswitch)  : next/previous buffer in list
+M-x recover-file            : recover autosave information
+M-x diff                    : diff files, default: current file and latest bak
+M-x diff-buffer-with-file   : diff current buffer with its file
 
-C-x left  : switch to previous buffer
-C-x right : switch to next buffer
-
-M-x ibuffer : operate on multiple buffers, h for help
+% To see the autosave info just go to .emacs.d/autosave.
 
 % ---- Moving, Selecting and Deleting ------------------------------------------
 
-M-g M-g	: move to line
-M-m		: move to first non blank character
-C-a		: move to begin of line
-C-e 	: move to end of line
-M-<		: move to beginning of buffer
-M-> 	: move to end of buffer
+M-g M-g : move to line
+M-m     : move to first non blank character
+C-a     : move to begin of line
+C-e     : move to end of line
+M-<     : move to beginning of buffer
+M->     : move to end of buffer
 
-C-b		: move backward one character
-C-f		: move forward one character
-M-b		: move backward one word            (M-left, C-left)
-M-f		: move forward one word             (M-right, C-right)
-C-p		: move backward one line
-C-n		: move forward one line
-C-up	: move backward one paragraph
-C-down	: move forward one paragraph
-M-v		: move backward one screen
-C-v		: move forward one screen
+C-b     : move backward one character
+C-f     : move forward one character
+M-b     : move backward one word            (alts: M-left, C-left)
+M-f     : move forward one word             (alts: M-right, C-right)
+C-p     : move backward one line
+C-n     : move forward one line
+C-up    : move backward one paragraph       (mine: M-p)
+C-down  : move forward one paragraph        (mine: M-n)
+M-v     : move forward one screen           (alt: pg up)
+S-M-V   : move backward one screen          (alt: pg dn)
+C-M-v   : forward screen other window
+S-C-M-v : backward screen other window
+C-,     : move backward 10 lines            (mine)
+C-;     : move forward 10 lines             (mine)
 
-C-x h	: select all
-C-w 	: kill region
-C-k	    : kill line after point
-C-spc	: set mark
+C-x h   : select all
+C-w     : kill region
+M-w     : copy region
+C-j     : delete region                     (mine)
+C-k     : kill line after point
+C-spc   : set mark
 C-x C-x : invert mark and point
 
-back	: delete char backward
-del		: delete char forward	            (C-d)
-M-del	: delete word backward
-M-d		: delete word forward
+back    : delete char backward
+C-d     : delete char forward               (alt: del)
+M-del   : delete word backward
+M-d     : delete word forward
+
+C-l     : recenter-top-bottom : center view on current line
 
 % ---- Windows and Frames ------------------------------------------------------
 
-C-x 0	  : delete window
+C-x 0     : delete window
 C-x 1     : display only one window
-C-x 2	  : split window vertically
-C-x 3	  : split window horizontally
+C-x 2     : split window horizontally
+C-x 3     : split window vertically
 
-C-x 4 0	  : delete window, kill buffer in it
+C-x 4 0   : delete window, kill buffer in it
 C-x 4 C-o : switch buffer in other window
-C-x 4 b   : switch buffer in other window then select it
-C-x 4 f	  : open/create file another window
+C-x 4 f   : open/create file another window
 
 C-x 5 0   : close frame
-C-x 5 2	  : create new frame
-C-x 5 b	  : select buffer in a new frame
-C-x 5 f	  : open file in a new frame
-C-x 5 r	  : open file read-only in a new frame
+C-x 5 2   : create new frame
+C-x 5 b   : select buffer in a new frame
+C-x 5 f   : open file in a new frame
+C-x 5 r   : open file read-only in a new frame
 C-x 5 o   : switch to other frame
 
 C-x o     : switch to next window
-C-x }	  : make window wider
-C-x {	  : make window less wide
-C-x ^	  : make window taller
-C-x +	  : make all window the same height and width
+C-x p     : switch to prev window                       (mine)
+C-x }     : make window wider
+C-x {     : make window less wide
+C-x ^     : make window taller
+C-x y     : make window 80 chars wide                   (mine)
+C-x +     : make all window the same height and width
 
 % ---- Help --------------------------------------------------------------------
 
 C-h i   : emacs infos
-C-h r   : manual
+C-h r   : manual ("Emacs" in emacs infos)
 
 basics (chapter 1)
-	n,p,u,t     next, prev (same level), up, top
-    space       scroll one page, eventually to next node
-	back        scroll back one page backward, eventually prev node
-    b           go to beginning
-    C-l         redisplay
-    ?           display list of commands
-    [,]         previous/next node, absolute order
-    m           menu (use name or number)
-    f           follow cross reference
-    tab         (after an m,f) auto-completion
-    tab,S-tab   next,prev line in menu
-    l           previous node in history
-    r           next node in history
-    L           list history
-    d           go to directory node (ultimate root)
-    q           exit
+    n,p,u,t         : next, prev (same level), up, top
+    space           : scroll one page, eventually to next node
+    back            : scroll back one page backward, eventually prev node
+    b               : go to beginning of node
+    ?               : display list of commands
+    [,]             : previous/next node (goes trough the nested levels)
+    m               : menu (use name or number)
+    f               : follow cross reference (inline link)
+    tab             : (after an m,f) auto-completion
+    tab,S-tab       : next, prev line in menu (set of starred lines)
+    l               : previous node in history
+    r               : next node in history
+    L               : list history
+    d               : go to emacs infos (ultimate root)
+    q               : exit
+
 advanced (chapter 2)
-    s           search manual from here (use C-s/C-r rather)
-    i           search indices for substring or keyboard shortcut
-    ,           next result from indices
-    I           like i, but display a menu of results
-    g           go to a node by name
-    M-n         new independent info buffer
-    C-u m/g     idem m/g but in a new buffer
-    C-u <n> i   go to the nth info buffer, creating it if necessary
+    s               : search manual from here (use C-s/C-r rather)
+    i               : search index for substrings or keybinds (in current man)
+    ,               : next result from the index
+    I               : like i, but display a menu of results
+    1-9             : pick item 1-9 from a menu
+    g               : go to a node by name
+    M-n             : new independent info buffer
+    C-u m/g         : idem m/g but in a new buffer
+    C-u <n> C-h i   : go to the nth info buffer, creating it if necessary
 
 M-x info-apropos    : find info file about topic
+C-h a               : commands whose names match topics
+C-h d               : commands and variables whose documentation matches topics
+C-h p               : find package
 
-C-h a   : commands whose names match topics
-C-h b   : active key bindings
-C-h c   : info about key binding
-C-h d   : commands and variables whose documentation matches topics
-C-h e   : show *Messages*
-C-h f   : describe lisp function or command
-C-h k   : name and documentation of command key
-C-h m   : describe modes
-C-h p   : find package
-C-h r   : emacs manual
-C-h v   : describe variable
-C-h w   : which keys runs the command ?
-C-h C   : describe coding system
-C-h K   : info node for key command
+C-h b               : active key bindings
+C-h c               : info about key binding (brief, in minibuffer)
+C-h e               : show *Messages*
+C-h m               : describe modes (see shadowed bindings here)
 
-C-x ESC ESC : view code for last command (with user input)
+C-h f               : describe lisp function or command
+C-h F               : info node for command
+C-h v               : describe variable
+C-h w               : which keys runs the command ?
+C-h C               : describe coding system
+C-h P               : describe package
+C-h k               : name and documentation of command key (C-h c + C-h f)
+C-h K               : info node for command key
+
+M-x describe-minor-mode
+
+% ---- Shell -------------------------------------------------------------------
+
+M-x shell   : gives an (existing, else new) emacs shell
+M-x nshell  : idem, but spawns a new shell each time                    (mine)
+M-p         : fetch previous command
+M-n         : fetch next command
+C-c C-n     : goto next command output
+C-c C-p     : goto previous command output
+C-l         : clear shell                                               (mine)
+C-c C-c     : kill command
+C-M-l       : show input (= clear if last command had no output)
+C-c r       : resync dirs (for autocompletion)                          (mine)
 
 % ---- Various -----------------------------------------------------------------
 
-M-x shell : gives an emacs shell
-M-p       : (in shell) fetch previous command
-M-n       : (in shell) fetch next command
-C-c C-c   : kill command
-C-M-l     : show input (= clear if last command had no output)
-C-c r     : resync dirs (for autocompletion)
-
 C-x z   : repeat last command
 
-C-y		: yank (paste)
-M-y		: after a C-y, change the text by the kill ring previous
-C-w		: kill (cut)
-M-w		: copy
+C-y     : yank (paste)
+M-y     : after a C-y, change the text by the kill ring previous
+C-w     : kill (cut)
+M-w     : copy
 
-C-g		: cancel command or remove mark
+C-g     : cancel command or remove mark
 
 C-z     : suspend (win : minimize)
-C-g	    : cancel command
+C-g     : cancel command
 M-x     : execute text command
 C-h v   : see variable documentation
 C-u number
@@ -267,8 +280,9 @@ copy whitout destroying
 
 % ---- Lisp Evaluation ---------------------------------------------------------
 
-M-:	      : evaluate elisp expression in minibuffers
-C-x C-e	  : evaluate elisp expression before point
+M-:       : evaluate elisp expression in minibuffers
+C-x C-e   : evaluate elisp expression before point
+    preceded by C-u: print in minibuffer
 
 M-x eval-region
 M-x eval-buffer
@@ -428,7 +442,7 @@ M-x kill-all-abbrevs
 
 % ---- Auctex ------------------------------------------------------------------
 
-C-c C-c     : run command
+C-c C-c     : run command   (mine change to be C-c C-n)
   (TeX-command-master)
 C-c C-t C-p : TeX-PDF-mode
 
@@ -443,3 +457,8 @@ M-x ps-print-...
 M-x ps-print-customize
 
 % ------------------------------------------------------------------------------
+
+ELPA
+
+M-x lacarte-e-m : execute menu command
+M-x des-un-keys : describe unbound keys (use complexity <= 5)

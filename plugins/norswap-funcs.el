@@ -1,4 +1,6 @@
-;;;;; Copy, paste, cut, delete and select. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Custom Functions
+
+;;;;; Copy, Paste, Cut, Delete and Select ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun select-word ()
   "Marks the word the cursor is on. Undefined (but harmless) if not on a word."
@@ -21,14 +23,16 @@
   (setq kill-ring (cdr kill-ring)) nil)
 
 (defun reverse-yank-pop (arg)
+  "Replace paste by newer paste (while yank-pop replaces it by an older one)."
   (interactive "p")
-  (yank-op (- arg)))
+  (yank-pop (- arg)))
 
-(defun paste-below ()
+(defun yank-below ()
+  "Insert a newline, then yank."
   (interactive)
   (move-end-of-line nil) (newline) (yank))
 
-;;;;; Indentation. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;; Indentation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun unindent ()
   "Moves the begin of the current line to column at the previous
@@ -76,9 +80,9 @@ in order."
     (switch-to-buffer buffer-b)))
 
 ;; Creates buf-move-stay-<dir> functions that do like buf-move-<dir> if buf-move
-;; stay is false, but don't change the selected window if it's true.
-;; If true, don't change the
-(defvar buf-move-stay nil)
+;; stay is nil, but don't change the selected window if it's true.
+;; The related customization is in norswap-interfaces.
+
 (defun buf-move-define (dir)
   (setq lexical-binding t)
   (lexical-let
@@ -89,8 +93,9 @@ in order."
            (let ((this-window (selected-window)))
              (funcall base-func)
              (select-window this-window))
-         (funcall base-func)
-)))))
+         (funcall base-func))))))
+
+(defvar buf-move-stay nil)
 (mapc 'buf-move-define '(up down left right))
 
 (defun buf-move-stay ()
@@ -143,7 +148,7 @@ the current window."
           (set-visited-file-name new-name)
           (set-buffer-modified-p nil))))))
 
-;;;;; Other functions. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;; Other Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun zoom-unzoom ()
   "Toggles font height from 90 to 100 or vice-versa."
@@ -164,11 +169,6 @@ the current window."
   (interactive)
   (select-window (minibuffer-window)))
 
-(defun eval-print ()
-  "Inserts the result of a lisp evaluation at point."
-  (interactive)
-  (insert (prin1-to-string (eval-minibuffer "Eval : "))))
-
 (defun set-80-columns ()
   "Set the selected window to 80 columns."
   (interactive)
@@ -181,6 +181,11 @@ point)."
   (setq show-trailing-whitespace (not show-trailing-whitespace))
   (force-window-update (window-buffer))
   (redisplay t))
+
+(defun prev-window ()
+  "Cycle trough window in the opposite direction than other-window."
+  (interactive)
+  (other-window -1))
 
 ;;;;; Personal ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -52,6 +52,10 @@
 (require 'norswap-shell)
 (require 'norswap-languages)
 (require 'norswap-backwards)
+(require 'norswap-elpa)
 (if (eq system-type 'windows-nt)
     (require 'norswap-windows)
     (require 'norswap-unix))
+
+;; Starts the server (allows to open all files with a single instance of emacs).
+(server-start)
