@@ -20,8 +20,10 @@
 
 ;; There are currently a few issues here.
 ;;
-;; - shell-resync-dirs does not work with msys bash because of the path
-;;   format (/c/stuff/thing instead of c:/stuff/thing)
+;; - shell-resync-dirs does not work with msys bash because of the path format
+;;   starting with "/c/". This should not be an issue as path completion works
+;;   as long as absolute path used when cd'ing are started with "C:/" rather
+;;   than "/c/".
 ;;
 ;; - with bash, comint-interrupt-subjob won't kill some processes, but the
 ;;   stronger comint-kill-subjob will kill the shell (note that for analogous
@@ -48,10 +50,10 @@
 ;; Put eshell files in this directory.
 (setq eshell-directory-name (concat user-emacs-directory "eshell"))
 
-(defadvice shell-resync-dirs (around inhibit-resync-output activate)
-    "Avoid reams of output in minibuffer on shell-resync-dir command."
-    (let ((standard-output (lambda (in) )))
-        ad-do-it nil))
+;; (defadvice shell-resync-dirs (around inhibit-resync-output activate)
+;;     "Avoid reams of output in minibuffer on shell-resync-dir command."
+;;     (let ((standard-output (lambda (in) )))
+;;         ad-do-it nil))
 
 ;; In $HOME, put in ".bashrc" (or equivalent):
 ;; export PS1='\e[33m\w\n\e[32m$\e[00m '
