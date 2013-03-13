@@ -40,8 +40,8 @@
 
 ;;;;; Moving Around in the File ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(norswap-key (kbd "C-,") (lambda () (interactive) (previous-line 10)))
-(norswap-key (kbd "C-;") (lambda () (interactive) (next-line 10)))
+(norswap-key (kbd "C-,") (lambda () (interactive) (forward-line -10)))
+(norswap-key (kbd "C-;") (lambda () (interactive) (forward-line 10)))
 (norswap-key (kbd "M-p") 'backward-paragraph)
 (norswap-key (kbd "M-n") 'forward-paragraph)
 (norswap-key (kbd "<wheel-up>") (lambda () (interactive) (scroll-down 5)))
@@ -80,6 +80,10 @@
 (norswap-key (kbd "C-/") 'buf-move-stay-up)
 (norswap-key (kbd "C-c m") 'buf-move-stay)
 
+(norswap-key (kbd "C-c c") 'goto-comment)
+(norswap-key (kbd "C-c v") 'next-column)
+(norswap-key (kbd "C-c x") 'prev-column)
+
 ;;;;; Indentation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (norswap-key (kbd "<backtab>")   'unindent)
@@ -113,8 +117,10 @@
 ;;;;; Mode Specific ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Command to compile at TeX file;
-(add-hook 'Tex-mode-hook (lambda ()
-	(define-key TeX-mode-map (kbd "C-c C-n") 'TeX-command-master)))
+(add-hook 'TeX-mode-hook (lambda ()
+    (define-key TeX-mode-map (kbd "C-c C-n") 'TeX-command-master)))
+; (define-key (current-local-map) ...) and (local-set-key ...) also work
+
 
 ;;;;; Unbound user functions. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -123,7 +129,8 @@
 
 ;;;;; Free keybinds. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; C-+ ;; C-t (non-lisp)
+;; C-+
+;; C-t (non-lisp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

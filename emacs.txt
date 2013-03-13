@@ -238,6 +238,19 @@ variable: require-final-newline : set to nil to disable adding a final
 
 M-x font-lock-fontify-buffer : recolor buffer
 
+byte compilation:
+    byte-compile-file
+    byte-recompile-file
+    byte-recompile-directory (with C-u 0, compile files with no .elc)
+
+C-x n w : widen
+C-x n n : narrow to region
+C-x n d : narrow to defun
+
+M-x kill-emacs : quit emacs and exits the daemon
+
+M-x list-package : list elpa package available for install
+
 % ---- Prefix Argument ---------------------------------------------------------
 
 M-<num> <cmd>       : arg of <num>

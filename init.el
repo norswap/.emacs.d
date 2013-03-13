@@ -58,4 +58,7 @@
     (require 'norswap-unix))
 
 ;; Starts the server (allows to open all files with a single instance of emacs).
+;; The first line is only useful for Windows, as Linux uses local sockets, which
+;; are not kept in a user directory but in /tmp/emacs<num>/.
+(setq server-auth-dir (car desktop-path))
 (server-start)

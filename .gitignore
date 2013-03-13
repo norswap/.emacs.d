@@ -1,8 +1,9 @@
 .*
 !.gitignore
-autosave
-backup
-server
-tramp
-eshell
-elpa/archives
+/autosave
+/backup
+/server
+/tramp
+/eshell
+/elpa/archives
+/files-*

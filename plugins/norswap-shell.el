@@ -35,8 +35,8 @@
   (interactive)
   (erase-buffer)
   (if (eq major-mode 'shell-mode)
-    (comint-send-input)
-    (eshell-send-input)))
+    (command-execute 'comint-send-input)
+    (command-execute 'eshell-send-input)))
 
 (defun interrupt-shell-process ()
   "Interrupts a shell process according to shell type (regular or eshell)."

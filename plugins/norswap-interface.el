@@ -50,11 +50,13 @@
     (when have-paste (push have-paste kill-ring))))
 
 ;; Automatically recompile .el files wich have already been compiled.
+;; Does not do the initial compilation.
 (defun auto-recompile-el-buffer ()
   (interactive)
   (when (and (eq major-mode 'emacs-lisp-mode)
              (file-exists-p (byte-compile-dest-file buffer-file-name)))
     (byte-compile-file buffer-file-name)))
+
 (add-hook 'after-save-hook 'auto-recompile-el-buffer)
 
 ;; Make buffer names unique by including part of file path.
@@ -170,20 +172,29 @@ Emacs, by setting process-list to nil before exiting."
                         64 68 72 76 80 84 88 92 96 100 104 108
                         112 116 120))
 
-;;;;; Auto-saving. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;; Auto-Saving ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'desktop)
+
+;; Save the folder in a different directory for each machine.
+;; Usefull if your .emacs.d is on Dropbox.
+(let ((dirname (concat user-emacs-directory "files-" system-name
+                       "-" (user-real-login-name))))
+  (unless (file-exists-p dirname)
+    (make-directory dirname))
+  (setq desktop-path `(,dirname)))
 
 ;; Save the session (open buffers) between emacs invocations.
 (desktop-save-mode 1)
+
+;; Autosave the desktop (don't wait till emacs exits).
+(add-hook 'auto-save-hook (lambda () (desktop-save-in-desktop-dir)))
 
 ;; Files deleted in dired go to the trash bin.
 (setq delete-by-moving-to-trash t)
 
 ;; Automatically save bookmarks changes.
 (setq bookmark-save-flag 1)
-
-;; Autosave the desktop in user-emacs-directory.
-(setq desktop-dirname user-emacs-directory)
-(add-hook 'auto-save-hook (lambda () (desktop-save-in-desktop-dir)))
 
 ;; All files are backed up in user-emacs-directory/backup.
 (defvar backup-dir (expand-file-name (concat user-emacs-directory "backup/")))

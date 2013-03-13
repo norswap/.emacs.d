@@ -32,6 +32,41 @@
   (interactive)
   (move-end-of-line nil) (newline) (yank))
 
+;;;;; Moving in Line ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun goto-comment ()
+  "Goto the first comment start character ad defined by the
+variable `comment-start'."
+  (interactive)
+  (let* ((cur-line (buffer-substring (point-at-bol) (point-at-eol)))
+         (offset (string-match comment-start cur-line)))
+    (unless (eq offset nil)
+      (goto-char (+ (point-at-bol) offset)))))
+
+(defun next-column ()
+  "Goto to the first character preceded by at least two spaces after the point.
+Won't get past the end of the line."
+  (interactive)
+  (let* ((cur-line (buffer-substring (point) (point-at-eol)))
+         (offset (string-match "  " cur-line)))
+    (unless (eq offset nil)
+      (goto-char (+ (point) offset))
+      (skip-chars-forward " " (point-at-eol)))))
+
+(defun prev-column ()
+  "Goto to the first character preceded by at least two spaces before the point.
+Won't get past the begin of the line."
+  (interactive)
+  (let* ((cur-line (buffer-substring (point-at-bol) (point)))
+         (cur-rev (concat (reverse (string-to-list cur-line))))
+         (offset))
+    (while (string-match "^ " cur-rev)
+      (setq cur-rev (replace-match "" t t cur-rev)))
+    (setq offset (string-match "  " cur-rev))
+    (unless (eq offset nil)
+      (skip-chars-backward " " (point-at-bol))
+      (goto-char (- (point) offset)))))
+
 ;;;;; Indentation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun unindent ()

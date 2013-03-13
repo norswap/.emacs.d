@@ -32,6 +32,13 @@
 ;; For GAS comments.
 (setq asm-comment-char ?\#)
 
+;;;;; SQL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Use '\' as an escape character.
+(add-hook 'sql-mode-hook
+          (lambda ()
+	    (modify-syntax-entry ?\\ "\\" sql-mode-syntax-table)))
+
 ;;;;; Python ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Restore C-c C-c to the comment functon and set an useful default for the
@@ -49,7 +56,12 @@
                 ("\\.cmake\\'" . cmake-mode))
               auto-mode-alist))
 
-;;;;; OZ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;; Ruby ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(add-hook 'ruby-mode-hook '(lambda ()
+   (setq ruby-insert-encoding-magic-comment nil)))
+
+;;;;; OZ ;x;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (if (boundp '*OZHOME*) (progn
   (add-to-list 'load-path (concat *OZHOME* "/share/elisp"))

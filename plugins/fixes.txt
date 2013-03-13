@@ -1,8 +1,0 @@
-;; SQL ESCAPING
-
-;; By default, sql-mode does not recognize \' as an escape for the
-;; single quote character, which can lead to a very crappy color
-;; highlighting. To fix everything, go to the sql.el file (in
-;; lisp-install-dir/progmodes) and comment out this line :
-;; (modify-syntax-entry ?\ “.” table)
-;; then type “M-x byte-compile-file” to compile and restart emacs.

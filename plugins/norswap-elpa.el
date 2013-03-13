@@ -1,9 +1,13 @@
 ;; Setup package repositories and customize packages (not keybinds).
 
+(require 'package)
+
 (setq package-archives '(
     ("gnu"          . "http://elpa.gnu.org/packages/")
     ("marmalade"    . "http://marmalade-repo.org/packages/")
     ("melpa"        . "http://melpa.milkbox.net/packages/")))
+
+(package-initialize)
 
 (defun color-theme-norswap ()
     "Switch to my color theme."
@@ -25,19 +29,20 @@
     ;; Display the window number in the mode-line.
     ;; Use M-<num> to switch to a window.
     (window-number-meta-mode 1)
-    (window-number-mode 0)
-)
+    (window-number-mode 0))
+
+(defun latex-setup ()
+    "Make latex-mode start in PDF mode."
+    (add-hook 'TeX-mode-hook (lambda ()
+    (TeX-global-PDF-mode t))))
 
 ;; Installed packages are loaded after the init file.
 ;; Place commande requiring that they are loaded here.
 (defun after-init-hook-func ()
     (color-theme-norswap)
-    (window-number-setup))
+    (window-number-setup)
+    (latex-setup))
 
 (add-hook 'after-init-hook 'after-init-hook-func)
-
-;; Latex mode starts in PDF mode.
-(add-hook 'Tex-mode-hook (lambda ()
-    (TeX-global-PDF-mode t)))
 
 (provide 'norswap-elpa)
