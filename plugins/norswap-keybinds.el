@@ -57,9 +57,6 @@
 ;; Open buffer in another window whitout switching to it.
 (norswap-key (kbd "C-S-x b") 'iswitchb-display-buffer)
 
-;; Open and replace current buffer.
-(norswap-key (kbd "C-x 6 f") 'open-replace-buffer)
-
 ;; Shift buffer right then open in current window.
 (norswap-key (kbd "C-x 8 f") 'shift-and-open)
 

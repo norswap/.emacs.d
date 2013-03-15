@@ -137,13 +137,6 @@ in order."
   (interactive)
   (setq buf-move-stay (not buf-move-stay)))
 
-(defun open-replace-buffer (path)
-  "Replace the current buffer by another file."
-  (interactive "F")
-  (let ((cur (window-buffer)))
-    (find-file path)
-    (kill-buffer cur)))
-
 (defun shift-and-open (path)
   "Shift the current buffer to the right then open a new file in
 the current window."
