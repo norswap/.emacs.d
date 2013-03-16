@@ -12,12 +12,12 @@ C-x k                       : kill buffer
 C-x C-f                     : open/create file
 C-x C-r                     : open file read only
 C-x C-v                     : kill buffer then open file
+C-x C-v RET                 : refresh buffer
 C-x C-c                     : exit (will ask for each file to save, C-h = help)
 
 C-x left                    : switch to previous buffer
 C-x right                   : switch to next buffer
 
-C-x C-v RET                 : find alternate file (use to refresh buffer)
 M-x ibuffer                 : operate on multiple buffers, h for help
 M-x make-directory RET      : create path of opened file
 
@@ -44,8 +44,8 @@ C-p     : move backward one line
 C-n     : move forward one line
 C-up    : move backward one paragraph       (mine: M-p)
 C-down  : move forward one paragraph        (mine: M-n)
-M-v     : move forward one screen           (alt: pg up)
-S-M-V   : move backward one screen          (alt: pg dn)
+pg up   : move backward one screen          (overriden: C-v)
+pg dn   : move backward one screen          (alt: M-v)
 C-M-v   : forward screen other window
 S-C-M-v : backward screen other window
 C-,     : move backward 10 lines            (mine)
@@ -74,8 +74,9 @@ C-x 2     : split window horizontally
 C-x 3     : split window vertically
 
 C-x 4 0   : delete window, kill buffer in it
-C-x 4 C-o : switch buffer in other window
-C-x 4 f   : open/create file another window
+C-x 4 C-o : switch buffer in next window
+C-x 4 f   : open/create file in next window
+C-x 4 k   : kill buffer in next window
 
 C-x 5 0   : close frame
 C-x 5 2   : create new frame
@@ -91,6 +92,8 @@ C-x {     : make window less wide
 C-x ^     : make window taller
 C-x y     : make window 80 chars wide                   (mine)
 C-x +     : make all window the same height and width
+C-:       : move buffer left                            (mine)
+C-=       : move buffer right                           (mine)
 
 % ---- Help --------------------------------------------------------------------
 

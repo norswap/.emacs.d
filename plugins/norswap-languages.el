@@ -58,8 +58,12 @@
 
 ;;;;; Ruby ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Do not insert an emacs (en)coding comment upon saving.
 (add-hook 'ruby-mode-hook '(lambda ()
    (setq ruby-insert-encoding-magic-comment nil)))
+
+;; Open rakefiles in ruby-mode.
+(setq auto-mode-alist  (cons '("Rakefile$" . ruby-mode) auto-mode-alist))
 
 ;;;;; OZ ;x;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
