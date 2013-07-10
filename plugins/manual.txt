@@ -1,0 +1,2 @@
+;; add to cmake-mode-autoloads.el (from elpa)
+(autoload 'cmake-mode "cmake-mode.el")

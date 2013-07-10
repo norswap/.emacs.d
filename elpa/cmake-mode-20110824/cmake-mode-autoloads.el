@@ -6,6 +6,9 @@
 ;;;### (autoloads nil nil ("cmake-mode-pkg.el" "cmake-mode.el") (20692
 ;;;;;;  15964 727000))
 
+;; Manuallay added.
+(autoload 'cmake-mode "cmake-mode.el")
+
 ;;;***
 
 (provide 'cmake-mode-autoloads)

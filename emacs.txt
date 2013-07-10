@@ -254,6 +254,8 @@ M-x kill-emacs : quit emacs and exits the daemon
 
 M-x list-package : list elpa package available for install
 
+M-x auto-revert-mode : update buffer when file changes
+
 % ---- Prefix Argument ---------------------------------------------------------
 
 M-<num> <cmd>       : arg of <num>
@@ -461,6 +463,7 @@ M-x kill-all-abbrevs
 C-c C-c     : run command   (mine change to be C-c C-n)
   (TeX-command-master)
 C-c C-t C-p : TeX-PDF-mode
+C-c C-q     : format bibtex entry
 
 % ---- Bash --------------------------------------------------------------------
 

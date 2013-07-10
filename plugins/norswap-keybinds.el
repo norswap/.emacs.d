@@ -100,6 +100,8 @@
 (norswap-key (kbd "C-x y") 'set-80-columns)
 (norswap-key (kbd "C-c i") 'toggle-trailing-whitespace-display)
 
+(norswap-key (kbd "M-Q") 'unfill-paragraph)
+
 ;; If a backspace encounters a tab, it will untabify it before deleting.
 (define-key global-map [remap backward-delete-char-untabify]
     'backward-delete-char)
