@@ -240,6 +240,7 @@ variable: require-final-newline : set to nil to disable adding a final
   in current buffer
 
 M-x font-lock-fontify-buffer : recolor buffer
+M-x describe-font : describe current font by default
 
 byte compilation:
     byte-compile-file
@@ -255,6 +256,11 @@ M-x kill-emacs : quit emacs and exits the daemon
 M-x list-package : list elpa package available for install
 
 M-x auto-revert-mode : update buffer when file changes
+
+C-t             transpose-chars (both chars around point)
+C-c <space>     ace-jump-word-mode
+C-u C-c <space>     ace-jump-char-mode
+C-u C-u C-c <space>     ace-jump-line-mode
 
 % ---- Prefix Argument ---------------------------------------------------------
 

@@ -45,4 +45,17 @@
 
 (add-hook 'after-init-hook 'after-init-hook-func)
 
+;;;;; Eclipse ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'eclim)
+(require 'eclimd)
+(global-eclim-mode)
+
+;; Also use this in norswap-windows.el:
+;; (custom-set-variables '(eclim-eclipse-dirs '("~/opt/eclipse")))
+;; (setq eclimd-default-workspace "C:/h/Dropbox/code")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 (provide 'norswap-elpa)

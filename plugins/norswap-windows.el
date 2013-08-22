@@ -39,4 +39,9 @@
     '(setq tramp-default-method "plink")
 )
 
+(custom-set-variables '(eclim-eclipse-dirs '("C:/h/p/eclipse")))
+(setq eclim-executable "C:/h/p/eclipse/eclim.bat")
+(setq eclimd-executable "C:/h/p/eclipse/eclimd.bat")
+(setq eclimd-default-workspace "C:/h/Dropbox/code")
+
 (provide 'norswap-windows)

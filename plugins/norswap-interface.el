@@ -3,6 +3,8 @@
 
 ;;;;; Visual ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(set-default-font "Consolas 9")
+
 ;; This font is used notably in TeX's verbatim blocks.
 (set-face-attribute 'fixed-pitch nil :height 90 :family "Courier New")
 

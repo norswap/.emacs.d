@@ -5,7 +5,7 @@
 
 ;;;### (autoloads (lacarte-execute-menu-command lacarte-execute-command
 ;;;;;;  lacarte-convert-menu-item-function lacarte) "lacarte" "lacarte.el"
-;;;;;;  (20956 41920))
+;;;;;;  (20978 51695))
 ;;; Generated autoloads from lacarte.el
 
 (let ((loads (get 'lacarte 'custom-loads))) (if (member '"lacarte" loads) nil (put 'lacarte 'custom-loads (cons '"lacarte" loads))))
@@ -52,7 +52,7 @@ in different ways, using `C-,'.
 
 ;;;***
 
-;;;### (autoloads nil nil ("lacarte-pkg.el") (20956 41920 370000))
+;;;### (autoloads nil nil ("lacarte-pkg.el") (20978 51695 163000))
 
 ;;;***
 
