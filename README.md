@@ -1,4 +1,4 @@
-To install
+# Installation
 
 - Run `git clone git@github.com:norswap/.emacs.d.git ~/.emacs.d`.
 
@@ -11,16 +11,30 @@ To install
   On Windows, the `site-lisp` directory is inside the emacs install directory
   (in doubt, try `C:\Program Files\emacs`).
 
-- [Linux] Add `.~/.emacs.d/init.sh` to your `.bashrc` (or equivalent).
+- \[Linux\] Add `.~/.emacs.d/init.sh` to your `.bashrc` (or equivalent).
 
-- [Windows] Symlink or copy `emacs.bat` to your emacs install directory, and run
+- \[Windows\] Symlink or copy `emacs.bat` to your emacs install directory, and run
   emacs via this file.
 
-Note: to make symlink on Windows, use [[LinkShellExtension (aka
-HardLinkShellExt)|http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html]].
+Note: to make symlinks in Windows, use [LinkShellExtension][lse].
 
-TODO: put more stuff in the README
+# Windows Shell Integration
 
-  - how to open files w/o extensions with emacs by default in Windows
-  - how to add an emacs option in the Windows context menu
-  - explain how to make windows symlinks
+- To associate files with without extensions, type this in a terminal:
+
+      assoc .=noext
+      ftype noext="PATH_TO_EMACS/emacs.bat" "%1"
+
+  This actually set the `HKEY_CLASSES_ROOT/.` register key to "noext", and the
+  `HKEY_CLASSES_ROOT/noext` key to `"PATH_TO_EMACS/emacs.bat" "%1"`.
+
+- To associate files with unkown extensions to emacs, set the
+  `HKEY_CLASSES_ROOT/Unknown/shell/emacs/command` key to
+  `"PATH_TO_EMACS/emacs.bat" "%1"`. Then set the
+  `HKEY_CLASSES_ROOT/Unkown/shell` key to `emacs`.
+
+- To add an "open with emacs" item to the context menu of all files, set the
+  `HKEY_CLASSES_ROOT/*/shell/open with emacs/command` to
+  `"PATH_TO_EMACS/emacs.bat" "%1"`.
+
+[lse]: http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html
