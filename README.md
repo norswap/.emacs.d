@@ -31,10 +31,12 @@ Note: to make symlinks in Windows, use [LinkShellExtension][lse].
 - To associate files with unkown extensions to emacs, set the
   `HKEY_CLASSES_ROOT/Unknown/shell/emacs/command` key to
   `"PATH_TO_EMACS/emacs.bat" "%1"`. Then set the
-  `HKEY_CLASSES_ROOT/Unkown/shell` key to `emacs`.
+  `HKEY_CLASSES_ROOT/Unkown/shell` key to `emacs`. Or just customize and run the
+  `regedit/unknown.reg` file.
 
 - To add an "open with emacs" item to the context menu of all files, set the
   `HKEY_CLASSES_ROOT/*/shell/open with emacs/command` to
-  `"PATH_TO_EMACS/emacs.bat" "%1"`.
+  `"PATH_TO_EMACS/emacs.bat" "%1"`. Or just customize and run the
+  `regedit/openwith.reg` file.
 
 [lse]: http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html
