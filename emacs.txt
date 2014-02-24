@@ -167,7 +167,12 @@ C-c r       : resync dirs (for autocompletion)                          (mine)
 C-x z   : repeat last command
 
 C-y     : yank (paste)
-M-y     : after a C-y, change the text by the kill ring previous
+M-y     : after a C-y, change the text by the kill ring earlier
+
+    C-u 0  C-y : yank later item in kill ring (-1 == two later)
+    C-u -1 M-y : after a C-y, change the text by the kill ring later
+        (can use other numbers ofc)
+
 C-w     : kill (cut)
 M-w     : copy
 
