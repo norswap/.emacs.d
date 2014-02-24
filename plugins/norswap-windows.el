@@ -44,4 +44,7 @@
 (setq eclimd-executable "C:/h/p/eclipse/eclimd.bat")
 (setq eclimd-default-workspace "C:/h/Dropbox/code")
 
+;; Font
+(set-face-attribute 'default nil :font "Consolas 9")
+
 (provide 'norswap-windows)
