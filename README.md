@@ -13,8 +13,20 @@
 
 - \[Linux\] Add `.~/.emacs.d/init.sh` to your `.bashrc` (or equivalent).
 
-- \[Windows\] Symlink or copy `emacs.bat` to your emacs install directory, and
-  run emacs via this file.
+- \[Windows\] Customize the variables at the top of `emacs.bat` and
+  `emacs-wait.bat` with the location of your emacs installation and the location
+  of this repository. Then add those files to your path and run emacs using
+  them.
+
+My emacs launch scripts will setup an emacs server the first time they are
+used. Subsequent uses of the command will open a buffer in the existing emacs
+window. `emacs.bat` and `em.sh` are the regular versions for Windows and Linux,
+while `emacs-wait.bat` and `emw.sh` are the waiting version: they wait until the
+opened buffer is closed to return from the script. The waiting versions are
+useful to edit git commit messages, for instance.
+
+`emm.sh` is a non-functional half-assed attempt to enable the same functionality
+on Mac OSX, with a few notes jotted down.
 
 Note: to make symlinks in Windows, use [LinkShellExtension][lse].
 
