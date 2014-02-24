@@ -3,8 +3,6 @@
 
 ;;;;; Visual ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(set-default-font "Consolas 9")
-
 ;; This font is used notably in TeX's verbatim blocks.
 (set-face-attribute 'fixed-pitch nil :height 90 :family "Courier New")
 
@@ -56,7 +54,7 @@
 (defun auto-recompile-el-buffer ()
   (interactive)
   (when (and (eq major-mode 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+             (file-exists-p (concat buffer-file-name "c")))
     (byte-compile-file buffer-file-name)))
 
 (add-hook 'after-save-hook 'auto-recompile-el-buffer)
@@ -217,7 +215,7 @@ Emacs, by setting process-list to nil before exiting."
 
 ;; The server socket file will be automatically stored in
 ;; <user-emacs-directory>/server on Windows, and in a temporary location on
-;; linux.
+;; linux/mac (inspected variable 'server-socket-dir to view).
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
