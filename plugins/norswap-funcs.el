@@ -35,7 +35,7 @@
 ;;;;; Moving in Line ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun goto-comment ()
-  "Goto the first comment start character ad defined by the
+  "Goto the first comment start character as defined by the
 variable `comment-start'."
   (interactive)
   (let* ((cur-line (buffer-substring (point-at-bol) (point-at-eol)))
