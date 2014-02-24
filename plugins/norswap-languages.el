@@ -68,8 +68,8 @@
 ;;;;; OZ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (if (boundp '*OZHOME*) (progn
-  (add-to-list 'load-path (concat *OZHOME* "/share/elisp"))
-  (add-to-list 'load-path (concat *OZHOME* "/share/elisp"))
+  (add-to-list 'load-path (concat *OZHOME* "/share/mozart/elisp"))
+  (add-to-list 'load-path (concat *OZHOME* "/share/mozart/elisp"))
   (add-to-list 'auto-mode-alist '("\\.oz\\'" . oz-mode))
   (add-to-list 'auto-mode-alist '("\\.ozg\\'" . oz-gump-mode))
   (autoload 'run-oz "oz" "" t)

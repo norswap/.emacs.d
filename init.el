@@ -46,6 +46,7 @@
 (load custom-file)
 
 (add-to-list 'load-path (concat user-emacs-directory "plugins"))
+(cond ((eq system-type 'windows-nt) (require 'norswap-windows-first)))
 (require 'norswap-funcs)
 (require 'norswap-keybinds)
 (require 'norswap-interface)
@@ -53,12 +54,16 @@
 (require 'norswap-languages)
 (require 'norswap-backwards)
 (require 'norswap-elpa)
-(if (eq system-type 'windows-nt)
-    (require 'norswap-windows)
-    (require 'norswap-unix))
+(cond ((eq system-type 'windows-nt) (require 'norswap-windows))
+      ((eq system-type 'darwin) (require 'norswap-osx))
+      (t (require 'norswap-unix)))
 
 ;; Starts the server (allows to open all files with a single instance of emacs).
 ;; The first line is only useful for Windows, as Linux uses local sockets, which
 ;; are not kept in a user directory but in /tmp/emacs<num>/.
 (setq server-auth-dir (car desktop-path))
 (server-start)
+
+;; Maximize on the Mac. Needs to be done here, else server-start somehow shrinks
+;; the window again.
+(cond ((eq system-type 'darwin) (maximize)))

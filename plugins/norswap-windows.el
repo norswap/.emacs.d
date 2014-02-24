@@ -1,5 +1,3 @@
-(defvar *OZHOME* "C:/h/ip/mozart")
-
 (defun maximize ()
   "Maximize the window."
   (interactive)
