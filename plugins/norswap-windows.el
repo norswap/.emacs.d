@@ -29,8 +29,8 @@
 (push '("\\.bat$" . nil) file-name-buffer-file-type-alist)
 
 ;; Make printing to machine possible via postscript printing to GhostScript.
-(setenv "GS_LIB" "C:/h/p/gs/lib")
-(setq ps-lpr-command "C:/h/p/gs/bin/gswin32c.exe")
+(setenv "GS_LIB" "C:/Program Files/gs/gs9.07/lib")
+(setq ps-lpr-command "C:/Program Files/gs/gs9.07/bin/gswin64c.exe")
 (setq ps-lpr-switches '("-q" "-dNOPAUSE" "-dBATCH" "-sDEVICE=mswinpr2"))
 (setq ps-printer-name t)
 
