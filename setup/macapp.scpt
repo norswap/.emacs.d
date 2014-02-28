@@ -7,6 +7,7 @@ global emacs
 on init()
 	set emacs to "/usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs"
 	set emacsclient to "/usr/local/Cellar/emacs/24.3/bin/emacsclient"
+	set yfile to "~/.emacs.d/setup/yfile.txt"
 	open_emacs()
 end init
 
@@ -22,8 +23,7 @@ on open_emacs()
 			end if
 		on error
 			# daemon is not running, start the daemon and open a frame
-			do shell script emacs & " --daemon"
-			do shell script emacsclient & " -c -n"
+			do shell script emacsclient & "-a \"\" -c -n"
 		end try
 	end tell
 end open_emacs
@@ -43,6 +43,6 @@ end open
 # Called when open is not called.
 on run {}
 	init()
-	# even if no new frames are created or daemon startedm focus emacs
+	# even if no new frames are created or daemon started, focus emacs
 	tell application "Emacs" to activate
 end run

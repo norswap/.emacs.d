@@ -14,6 +14,7 @@ C-x C-r                     : open file read only
 C-x C-v                     : kill buffer then open file
 C-x C-v RET                 : refresh buffer
 C-x C-c                     : exit (will ask for each file to save, C-h = help)
+M-x kill-emacs              : exit and kill the emacs daemon if any
 
 C-x left                    : switch to previous buffer
 C-x right                   : switch to next buffer
