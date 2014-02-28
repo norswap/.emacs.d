@@ -24,6 +24,6 @@
 (add-to-list 'exec-path "/usr/local/bin")
 
 ;; Font
-(set-face-attribute 'default nil :font "Menlo-Regular 10")
+(set-face-attribute 'default nil :font "Menlo Regular 11")
 
 (provide 'norswap-osx)
