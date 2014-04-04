@@ -3,6 +3,7 @@
 (setq mac-command-modifier 'control)
 (setq mac-control-modifier nil)
 (setq mac-option-modifier 'meta)
+(setq mac-right-option-modifier nil)
 
 ;; "Native" fullscreen. Apparently changes often.
 ;; (ns-toggle-fullscreen) is undefined.
