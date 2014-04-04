@@ -430,6 +430,7 @@ C-x C-u : region to lowercase
 
 C-x f   : set fill-column (text wrapping)
 M-q     : fill paragraph (wrap paragraph)
+M-Q     : unfill paragraph (mine)
 C-c q   : toggle auto-fill-mode (automatic text wrapping)
 M-o M-s : center text
 
