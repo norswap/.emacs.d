@@ -41,10 +41,11 @@ HELP="
 LOG="echo"
 
 # Select log file, leave emtpy for stdout.
-LOGF="test"
+LOGF="/tmp/emmtest"
 
 # Logging function.
 log () { $LOG $@ 1>>$LOGF; }
+#log () { :; }
 
 ################################################################################
 # PROCESS PARAMS
