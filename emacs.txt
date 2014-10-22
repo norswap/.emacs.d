@@ -45,17 +45,17 @@ C-p     : move backward one line
 C-n     : move forward one line
 C-up    : move backward one paragraph       (mine: M-p)
 C-down  : move forward one paragraph        (mine: M-n)
-pg up   : move backward one screen          (overriden: C-v)
-pg dn   : move backward one screen          (alt: M-v)
+pg up   : move backward one screen
+pg dn   : move backward one screen
 C-M-v   : forward screen other window
 S-C-M-v : backward screen other window
-C-,     : move backward 10 lines            (mine)
-C-;     : move forward 10 lines             (mine)
+C-v     : move backward 10 lines            (my overload, norm. pg.dn)
+M-v     : move forward 10 lines             (my overload, norm. pg.up)
 
 C-x h   : select all
 C-w     : kill region
 M-w     : copy region
-C-j     : delete region                     (mine)
+C-c d   : delete region                     (mine)
 C-k     : kill line after point
 C-spc   : set mark
 C-x C-x : invert mark and point
@@ -85,16 +85,66 @@ C-x 5 b   : select buffer in a new frame
 C-x 5 f   : open file in a new frame
 C-x 5 r   : open file read-only in a new frame
 C-x 5 o   : switch to other frame
+C-x C-z   : minimize frame
 
 C-x o     : switch to next window
 C-x p     : switch to prev window                       (mine)
 C-x }     : make window wider
 C-x {     : make window less wide
 C-x ^     : make window taller
+C-c ^     : make window less tall                       (mine)
 C-x y     : make window 80 chars wide                   (mine)
 C-x +     : make all window the same height and width
-C-:       : move buffer left                            (mine)
-C-=       : move buffer right                           (mine)
+
+direction commands (mine)
+
+<dir> (directions)
+h = left
+j = bottom
+k = top
+l = right
+
+C-C <dir><dir>  : move to window in that direction
+C-c <dir> s     : swap with buffer in direction (keeps window)
+C-c <dir> m     : move buffer to window in direction (changes window)
+C-c <dir> f     : open file in window in direction
+C-c <dir> b     : open buffer in window in direction
+
+;; can also save window layout to register
+
+winner-mode:
+    C-c <left>  : redo window layout change
+    C-c <right> : undo latest window layout change
+
+% ---- Registers ---------------------------------------------------------------
+
+C-x r <SPC>     : save position in register
+C-x r s         : save region (text) to register
+C-x r r         : save rectangle to register
+C-x r w         : save window layout of current frame to register
+C-x r f         : save window layout of all frames to register
+
+C-u <num> C-x r n       : save number to register
+C-x r +                 : append text to register, or increment number register
+                            with prefix argument, add that amount
+M-x view-register       : view specified register
+M-x prepend-to-register : prepend to text register
+
+C-x r i         : insert text, number or rectangle from a register
+C-x r j         : jump to register (position, window layout, file)
+
+;; Put a file in register z:
+(set-register ?z '(file . "/my/file/path"))
+
+% ---- Bookmarks ---------------------------------------------------------------
+
+(Persistent position registers with long names.)
+
+C-x r m <name>  : set the named bookmark at point (empty = file name)
+C-w r b <name>  : jump to the named bookmark (empty = file name)
+C-x r l         : list all bookmarks (can edit them)
+
+;; can also load/save bookmarks to arbitrary files
 
 % ---- Help --------------------------------------------------------------------
 
@@ -221,10 +271,7 @@ C-o : insert newline whitout moving cursor
 M-x color-theme-select : select a color-theme
 
 M-x follow-mode : two adjacent window showing the same file will scroll as one
-
-winner-mode:
-    C-c <left>  : redo window layout change
-    C-c <right> : undo latest window layout change
+    (i.e. two column mode)
 
 C-x C-o : leave only one empty line between paragraphs
 
@@ -319,6 +366,11 @@ M-x eval-buffer
 
 M-x byte-compile-file
 
+C-c e : eval-print-last-sexp (evaluates and print below in the buffer)
+    (mine for everywhere, C-j natively in Lisp interaction)
+
+M-x ielm    : get a lisp REPL console
+
 % ---- Dired -------------------------------------------------------------------
 
 n       : next file
@@ -410,8 +462,12 @@ M-s o : open a buffer with a copy of line where regexp occurs
 C-w (after C-s) : append word at point to minibuffer
 
 replace-string
+replace-regexp
 query-replace           (M-%)
 query-replace-regexp    (C-M-%)
+
+    To do it only within a region, use narrow-to-region (C-x n n) and widen
+    (C-x n w).
 
 M-x occur       : find all occurences of regexp in current buffer
 M-x multi-occur : idem but specify a list of buffers

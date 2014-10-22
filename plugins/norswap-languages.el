@@ -32,13 +32,6 @@
 ;; For GAS comments.
 (setq asm-comment-char ?\#)
 
-;;;;; SQL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Use '\' as an escape character.
-(add-hook 'sql-mode-hook
-          (lambda ()
-	    (modify-syntax-entry ?\\ "\\" sql-mode-syntax-table)))
-
 ;;;;; Python ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Restore C-c C-c to the comment functon and set an useful default for the
@@ -55,6 +48,10 @@
       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
                 ("\\.cmake\\'" . cmake-mode))
               auto-mode-alist))
+
+;;;;; Lua ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq lua-indent-level 4)
 
 ;;;;; Ruby ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

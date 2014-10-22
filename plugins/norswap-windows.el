@@ -9,10 +9,16 @@
 ;; and its path added to %PATH%). "-qq" is for the very quiet mode.
 (setq archive-zip-extract '("unzip" "-qq"))
 
-;; Maximize the frame and split into two windows.
-(add-hook 'window-setup-hook (lambda ()
-  (maximize)
-  (split-window-horizontally 90)))
+;; Maximize the frame at startup.
+(defun windows-maximize ()
+  "Maximizes the current frame on Windows."
+  (interactive)
+  (w32-send-sys-command #xf030))
+(setq term-setup-hook 'windows-maximize)
+(setq window-setup-hook 'windows-maximize)
+
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
 ;; Opening files with their Windows associated programs from whitin dired,
 ;; with the F3 key.
@@ -36,11 +42,6 @@
 (eval-after-load "tramp"
     '(setq tramp-default-method "plink")
 )
-
-(custom-set-variables '(eclim-eclipse-dirs '("C:/h/p/eclipse")))
-(setq eclim-executable "C:/h/p/eclipse/eclim.bat")
-(setq eclimd-executable "C:/h/p/eclipse/eclimd.bat")
-(setq eclimd-default-workspace "C:/h/Dropbox/code")
 
 ;; Font
 (set-face-attribute 'default nil :font "Consolas 9")

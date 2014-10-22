@@ -1,5 +1,11 @@
 ;; This file requires:
-;; uniquify, visible-mark, dired-copy-paste
+;; uniquify, visible-mark, dired-copy-paste, browse-kill-ring
+
+;;;;; Misc ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Don't produce a bell sound on some event (like scroll-up at the top) but
+;; do some visual gimmick instead.
+(setq visible-bell t)
 
 ;;;;; Visual ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -20,7 +26,7 @@
 
 ;; Display trailing whitespace.
 ;; Disable with 'toggle-trailing-whitespace-display.
-(setq show-trailing-whitespace t)
+(setq-default show-trailing-whitespace t)
 
 ;;;;; Extended functionality. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -74,6 +80,9 @@
 ;; Allow copy-pasting of files in dired.
 (require 'dired-copy-paste)
 
+;; Allow browsing editing the kill ring.
+(require 'browse-kill-ring)
+
 ;;;;; Mark ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Disable transient mark : the region is always active and not highlighted. It
@@ -96,7 +105,12 @@
 (setq-default auto-fill-function 'do-auto-fill)
 
 ;; Delete trailing whitespace on save.
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(make-variable-buffer-local 'delete-trailing-whitespace-on-save)
+(setq-default delete-trailing-whitespace-on-save t)
+(add-hook 'before-save-hook
+          (lambda ()
+            (if delete-trailing-whitespace-on-save
+                (delete-trailing-whitespace))))
 
 ;;;;; Encoding ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -116,9 +130,13 @@
 
 ;;;;; Noise ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Shut off message buffer. Comment in case of debugging.
-(setq message-log-max nil)
-(kill-buffer "*Messages*")
+;; To shut off message buffer. It does supply useful information however, so I
+;; re-enabled it.
+;(setq message-log-max nil)
+;(kill-buffer "*Messages*")
+
+;; Give me a backtrace when something goes wrong.
+(setq debug-on-error t)
 
 ;; Don't ask confirmation to kill a buffer that has a process.
 (setq kill-buffer-query-functions
@@ -205,6 +223,12 @@ Emacs, by setting process-list to nil before exiting."
   (expand-file-name (concat user-emacs-directory "autosave/")))
 (setq auto-save-list-file-prefix (concat autosave-dir "/"))
 (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+
+;; Disable the creation of .#filename lockfiles on some systems (such as OSX):
+;; those detect collision between multiple edits of the same file on access
+;; rather than on save. Detecting on save is sufficient, and doesn't risk
+;; leaving garbage in the file system.
+(setq create-lockfiles nil)
 
 ;; Sometimes auto-save files generate annoying conflicts. This is a means to
 ;; simply discard all auto-save data for a file.

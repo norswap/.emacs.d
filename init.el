@@ -63,7 +63,4 @@
 ;; are not kept in a user directory but in /tmp/emacs<num>/.
 (setq server-auth-dir (car desktop-path))
 (server-start)
-
-;; Maximize on the Mac. Needs to be done here, else server-start somehow shrinks
-;; the window again.
-(cond ((eq system-type 'darwin) (maximize)))
+(put 'narrow-to-region 'disabled nil)

@@ -1,4 +1,4 @@
- @ECHO OFF
+@ECHO OFF
 
 :: CUSTOMIZE THESE
 set installdir=C:\Chocolatey\lib\Emacs.24.3\tools\emacs-24.3\bin

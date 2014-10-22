@@ -98,44 +98,33 @@ multiple of tab-width."
   (interactive)
   (kill-buffer (window-buffer (next-window))))
 
-(defun swap-buffer ()
-  "Exchange the buffer in this window and the buffer in the next
-window. If there is only one window, creates another one
-first. Successive invokations move the buffer trough all windows
-in order."
-  (interactive)
-  (if (one-window-p)
-      (progn
-        (split-window-vertically)
-        (display-buffer (other-buffer) t)))
-  (let* ((buffer-a (current-buffer))
-         (window-b (next-window))
-         (buffer-b (window-buffer window-b)))
-    (set-window-buffer window-b buffer-a)
-    (switch-to-buffer buffer-b)))
+(defun buf-swap-left ()
+"Swap the current buffer with the buffer in the window to its left."
+    (interactive)
+    (let ((this-window (selected-window)))
+      (buf-move-left)
+      (select-window this-window)))
 
-;; Creates buf-move-stay-<dir> functions that do like buf-move-<dir> if buf-move
-;; stay is nil, but don't change the selected window if it's true.
-;; The related customization is in norswap-interfaces.
+(defun buf-swap-down ()
+"Swap the current buffer with the buffer in the window below it."
+    (interactive)
+    (let ((this-window (selected-window)))
+      (buf-move-down)
+      (select-window this-window)))
 
-(defun buf-move-define (dir)
-  (setq lexical-binding t)
-  (lexical-let
-      ((base-func (intern (concat "buf-move-" (symbol-name dir))))
-       (new-func  (intern (concat "buf-move-stay-" (symbol-name dir)))))
-    (setf (symbol-function new-func) (lambda () (interactive)
-       (if buf-move-stay
-           (let ((this-window (selected-window)))
-             (funcall base-func)
-             (select-window this-window))
-         (funcall base-func))))))
+(defun buf-swap-up ()
+"Swap the current buffer with the buffer in the window above it."
+    (interactive)
+    (let ((this-window (selected-window)))
+      (buf-move-up)
+      (select-window this-window)))
 
-(defvar buf-move-stay nil)
-(mapc 'buf-move-define '(up down left right))
-
-(defun buf-move-stay ()
-  (interactive)
-  (setq buf-move-stay (not buf-move-stay)))
+(defun buf-swap-right ()
+"Swap the current buffer with the buffer in the window to its right."
+    (interactive)
+    (let ((this-window (selected-window)))
+      (buf-move-right)
+      (select-window this-window)))
 
 (defun shift-and-open (path)
   "Shift the current buffer to the right then open a new file in
@@ -219,7 +208,10 @@ point)."
   "Takes a multi-line paragraph and makes it into a single line of text."
   (interactive)
   (let ((fill-column (point-max)))
-    (fill-paragraph nil)))
+    (fill-paragraph))
+  (let ((fill-column (point-max))
+        (fill-prefix ""))
+    (fill-paragraph)))
 
 ;;;;; Personal ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

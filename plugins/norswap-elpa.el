@@ -25,11 +25,8 @@
         :width 'ultra-condensed :foreground "black"))
 
 (defun window-number-setup ()
-    (load "window-number")
-    ;; Display the window number in the mode-line.
-    ;; Use M-<num> to switch to a window.
-    (window-number-meta-mode 1)
-    (window-number-mode 0))
+    (require 'window-number)
+    (window-number-mode 1))
 
 (defun latex-setup ()
     "Make latex-mode start in PDF mode."
@@ -44,16 +41,6 @@
     (latex-setup))
 
 (add-hook 'after-init-hook 'after-init-hook-func)
-
-;;;;; Eclipse ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'eclim)
-(require 'eclimd)
-(global-eclim-mode)
-
-;; Also use this in norswap-windows.el:
-;; (custom-set-variables '(eclim-eclipse-dirs '("~/opt/eclipse")))
-;; (setq eclimd-default-workspace "C:/h/Dropbox/code")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

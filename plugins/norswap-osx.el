@@ -5,21 +5,14 @@
 (setq mac-option-modifier 'meta)
 (setq mac-right-option-modifier nil)
 
-;; "Native" fullscreen. Apparently changes often.
-;; (ns-toggle-fullscreen) is undefined.
-(defun fullscreen ()
-  (interactive)
-  (set-frame-parameter nil 'fullscreen 'fullboth))
-
 ;; Maximize
-;; Called in init.el
-(defun maximize ()
+(defun osx-maximize ()
   (interactive)
   (set-frame-parameter nil 'fullscreen 'maximized))
 
-;; Split window horizontally.
-(add-hook 'window-setup-hook (lambda ()
-  (split-window-horizontally 90)))
+;; Split window horizontally on startup.
+; (add-hook 'window-setup-hook (lambda ()
+;  (split-window-horizontally 90)))
 
 ;; Necessary for gpg.
 (add-to-list 'exec-path "/usr/local/bin")
@@ -31,5 +24,11 @@
 
 ;; When dragging a file onto emacs, don't open a new window.
 (setq ns-pop-up-frames nil)
+
+;; Sets $MANPATH, $PATH and exec-path from the shell.
+(exec-path-from-shell-initialize)
+
+;; Disable GUI dialogs, which are unresponsive on OSX.
+(setq use-dialog-box nil)
 
 (provide 'norswap-osx)

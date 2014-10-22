@@ -4,9 +4,9 @@
 
 ;;;;; Keymaps ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Use C-v as a prefix.
-(define-prefix-command 'ctrl-v-prefix)
-(global-set-key (kbd "C-v") 'ctrl-v-prefix)
+;; Keep as an example of how to make a prefix, but C-v is scroll-down.
+;(define-prefix-command 'ctrl-v-prefix)
+;(global-set-key (kbd "C-v") 'ctrl-v-prefix)
 
 ;; A minor mode to override keys in all major mode.
 (defvar norswap-keys (make-keymap) "norswap-keys-minor-mode keymap")
@@ -32,24 +32,25 @@
 ;;;;; Copy, Paste, Cut, Delete and Select ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (norswap-key (kbd "M-Y")     'reverse-yank-pop)
-(norswap-key (kbd "C-c y")   'yank-below)
-(norswap-key (kbd "C-j")     'delete-region)
-(norswap-key (kbd "C-c s")   'select-line)
-(norswap-key (kbd "C-c d")   'select-paragraph)
-(norswap-key (kbd "C-c f")   'select-word)
+(norswap-key (kbd "C-c y")   'browse-kill-ring)
+(norswap-key (kbd "C-c u")   'yank-below)
+(norswap-key (kbd "C-c w")   'delete-region)
+(norswap-key (kbd "C-c i")   'select-line)
+(norswap-key (kbd "C-c o")   'select-paragraph)
+(norswap-key (kbd "C-c p")   'select-word)
 
 ;;;;; Moving Around in the File ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(norswap-key (kbd "C-,") (lambda () (interactive) (forward-line -10)))
-(norswap-key (kbd "C-;") (lambda () (interactive) (forward-line 10)))
+;; Override these commands, normally are scroll-down/up-command.
+(norswap-key (kbd "M-v") (lambda () (interactive) (forward-line -10)))
+(norswap-key (kbd "C-v") (lambda () (interactive) (forward-line 10)))
+
 (norswap-key (kbd "M-p") 'backward-paragraph)
 (norswap-key (kbd "M-n") 'forward-paragraph)
 (norswap-key (kbd "<wheel-up>") (lambda () (interactive) (scroll-down 5)))
 (norswap-key (kbd "<wheel-down>") (lambda () (interactive) (scroll-up 5)))
 
 ;;;;; Switching and Moving Buffers ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(norswap-key (kbd "C-x p") 'prev-window)
 
 ;; Display modern buffer list.
 (norswap-key (kbd "C-x C-b") 'ibuffer)
@@ -63,20 +64,46 @@
 ;; Kill the buffer in the next window.
 (norswap-key (kbd "C-x 4 k") 'kill-next-window-buffer)
 
-;; Exchange the buffer with the one on the right (wraps over).
-(norswap-key (kbd "C-x x")   'swap-buffer)
-
 ;; Delete current buffer and current file (asks confirmation).
-(norswap-key (kbd "C-c k")   'delete-file-and-buffer)
+(norswap-key (kbd "C-c d")   'delete-file-and-buffer)
+(norswap-key (kbd "C-c r")   'rename-file-and-buffer)
 
 ;; Wraps directions around for buffer displacement (elpa: buffer-move).
 (setq windmove-wrap-around t)
-(norswap-key (kbd "C-:") 'buf-move-stay-left)
-(norswap-key (kbd "C-=") 'buf-move-stay-right)
-(norswap-key (kbd "C-+") 'buf-move-stay-down)
-(norswap-key (kbd "C-/") 'buf-move-stay-up)
-(norswap-key (kbd "C-c m") 'buf-move-stay)
 
+(define-prefix-command 'C-c-h-prefix)
+(norswap-key (kbd "C-c h") 'C-c-h-prefix)
+(define-prefix-command 'C-c-j-prefix)
+(norswap-key (kbd "C-c j") 'C-c-j-prefix)
+(define-prefix-command 'C-c-k-prefix)
+(norswap-key (kbd "C-c k") 'C-c-k-prefix)
+(define-prefix-command 'C-c-l-prefix)
+(norswap-key (kbd "C-c l") 'C-c-l-prefix)
+
+(global-set-key (kbd "C-c hh") 'windmove-left)
+(global-set-key (kbd "C-c jj") 'windmove-down)
+(global-set-key (kbd "C-c kk") 'windmove-up)
+(global-set-key (kbd "C-c ll") 'windmove-right)
+(global-set-key (kbd "C-c hm") 'buf-move-left)
+(global-set-key (kbd "C-c jm") 'buf-move-down)
+(global-set-key (kbd "C-c km") 'buf-move-up)
+(global-set-key (kbd "C-c lm") 'buf-move-right)
+(global-set-key (kbd "C-c hs") 'buf-swap-left)
+(global-set-key (kbd "C-c js") 'buf-swap-down)
+(global-set-key (kbd "C-c ks") 'buf-swap-up)
+(global-set-key (kbd "C-c ls") 'buf-swap-right)
+(global-set-key (kbd "C-c hf") (kbd "C-c hh C-x C-f C-u C-x q"))
+(global-set-key (kbd "C-c jf") (kbd "C-c jj C-x C-f C-u C-x q"))
+(global-set-key (kbd "C-c kf") (kbd "C-c kk C-x C-f C-u C-x q"))
+(global-set-key (kbd "C-c lf") (kbd "C-c ll C-x C-f C-u C-x q"))
+(global-set-key (kbd "C-c hb") (kbd "C-c hh C-x b C-u C-x q"))
+(global-set-key (kbd "C-c jb") (kbd "C-c jj C-x b C-u C-x q"))
+(global-set-key (kbd "C-c kb") (kbd "C-c kk C-x b C-u C-x q"))
+(global-set-key (kbd "C-c lb") (kbd "C-c ll C-x b C-u C-x q"))
+
+;; unused: C-: / C-= / C-+ / C-/
+
+(norswap-key (kbd "C-c ^") 'shrink-window)
 (norswap-key (kbd "C-c c") 'goto-comment)
 (norswap-key (kbd "C-c v") 'next-column)
 (norswap-key (kbd "C-c x") 'prev-column)
@@ -98,9 +125,9 @@
 (norswap-key (kbd "C-c C-v") 'uncomment-region)
 (norswap-key (kbd "C-x g") 'select-minibuffer)
 (norswap-key (kbd "C-x y") 'set-80-columns)
-(norswap-key (kbd "C-c i") 'toggle-trailing-whitespace-display)
-
+(norswap-key (kbd "C-c t") 'toggle-trailing-whitespace-display)
 (norswap-key (kbd "M-Q") 'unfill-paragraph)
+(norswap-key (kbd "C-c e") 'eval-print-last-sexp)
 
 ;; If a backspace encounters a tab, it will untabify it before deleting.
 (define-key global-map [remap backward-delete-char-untabify]
