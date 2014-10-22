@@ -43,6 +43,10 @@ scripts `emm.sh` and `emmw.sh`, which were made for OSX should work on Linux
   Alternatively, add symlinks (*) to the scripts in a directory that you already
   know to be on the path (e.g. `/usr/local/bin` or `C:\Windows\System32`).
 
+- For speed compile all elisp file by typing `C-u 0 M-x
+  byte-recompile-directory` inside emacs. The files will recompile automatically
+  if edited inside emacs.
+
 My emacs launch scripts will setup an emacs server the first time they are
 used. Subsequent uses of the command will open a buffer in the existing emacs
 window. For each system there is a regular and a waiting version. The waiting
