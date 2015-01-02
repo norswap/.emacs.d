@@ -30,6 +30,9 @@
 
 ;;;;; Extended functionality. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Enable the narrow-to-region functionality.
+(put 'narrow-to-region 'disabled nil)
+
 ;; Can use minibuffer commands while in buffer (useful with shell (C-!)).
 (setq enable-recursive-minibuffers t)
 
@@ -100,6 +103,9 @@
 
 ;; Wrap text at column 80 with M-q or automatically (see below).
 (setq-default fill-column 80)
+
+;; A sentence ends with a dot, then a *single* space.
+(setq sentence-end-double-space nil)
 
 ;; Automatically wrap text.
 (setq-default auto-fill-function 'do-auto-fill)
@@ -179,7 +185,7 @@ Emacs, by setting process-list to nil before exiting."
 
 ;;;;; Indentation. ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Tabs are insert as spaces.
+;; Tabs are inserted as spaces.
 (setq-default indent-tabs-mode nil)
 
 ;; Tab character has the same width as 4 spaces.

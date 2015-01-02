@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Sets up emacs on Mac OSX. Idempotent, so can be run again (e.g. if applescript
-# file needs recompiling).
+# file needs recompiling, or when OSX updates and overwrites the /usr/bin
+# binaries).
 
 # Directory containing this file.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

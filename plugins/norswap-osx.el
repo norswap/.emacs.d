@@ -15,7 +15,7 @@
 ;  (split-window-horizontally 90)))
 
 ;; Necessary for gpg.
-(add-to-list 'exec-path "/usr/local/bin")
+;(add-to-list 'exec-path "/usr/local/bin")
 
 ;; Font
 (add-to-list 'default-frame-alist '(font . "Menlo Regular 11"))

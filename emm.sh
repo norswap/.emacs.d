@@ -54,10 +54,10 @@ log () { $LOG $@ 1>>$LOGF; }
 # first argument (-w present <=> -n absent). Remove "-w" from arglist.
 [[ "$@" == -w* ]] && { shift; N=""; } || N="-n"
 
-# -nw implies -w.
+# -nw implies -w, implies that -n should be absent.
 [[ "$@" == -nw* ]] && N=""
 
-# Use ARGS the board because $@ cannot be assigned to.
+# Use ARGS accross the board because $@ cannot be assigned to.
 ARGS="$@"
 
 # If there are no files specified, specify a default file.
@@ -81,7 +81,7 @@ if [[ "$DRUNNING" != "0" ]]; then
     # have an annoying prompt on Linux.
     rm ~/".emacs.d/files-$(hostname)-$(whoami)/.emacs.desktop.lock"
     log "not running: $ECLIENT $N -a '' -c $ARGS"
-    $ECLIENT $N -a "" -c $ARGS
+    $ECLIENT $N -a '' -c $ARGS
 elif [[ "$FVISIBLE" != "t" ]]; then
     log "running but not visible: $ECLIENT $N -c $ARGS"
     # there is a not a visible frame, open one (-c)

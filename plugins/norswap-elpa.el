@@ -34,7 +34,7 @@
     (TeX-global-PDF-mode t))))
 
 ;; Installed packages are loaded after the init file.
-;; Place commande requiring that they are loaded here.
+;; Place commands requiring that they are loaded here.
 (defun after-init-hook-func ()
     (color-theme-norswap)
     (window-number-setup)

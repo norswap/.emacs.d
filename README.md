@@ -7,7 +7,7 @@ scripts `emm.sh` and `emmw.sh`, which were made for OSX should work on Linux
 # Installation
 
 - Run `git clone git@github.com:norswap/.emacs.d.git EMACS_PARENT/.emacs.d`,
-  replacing EMACS_PARENT by the directory where you want to put repository.
+  replacing `EMACS_PARENT` by the directory where you want to put repository.
 
 - Optionally, customize and symlink `site-start.el` from your `site-lisp`
   directory to the `site-start.el` in this directory. Since `site-start.el` is
@@ -20,14 +20,14 @@ scripts `emm.sh` and `emmw.sh`, which were made for OSX should work on Linux
         /usr/local/share/emacs/site-lisp/site-start.el
 
   On Windows (*), the `site-lisp` directory is inside the emacs install directory
-  (in doubt, try `C:\Program Files\emacs`).
+  (if in doubt, try `C:\Program Files\emacs`).
 
-- Alternatively, symlink .~/.emacs.d to the repository (or just clone it there
+- Alternatively, symlink `.~/.emacs.d` to the repository (or just clone it there
   in the first place).
 
     ln -s EMACS_PARENT/.emacs.d ~/.emacs.d
 
-- Add emacs launch scripts to your PATH environment variable.
+- Add emacs launch scripts to your `PATH` environment variable.
 
   The launch scripts are `emacs.bat` and `emacs-wait.bat` on Windows; and
   `em.sh`, `emw.sh` on Linux.
@@ -145,3 +145,45 @@ which is why the `em`/`emw` scripts should be used instead.
 unsafe`, try taking ownership of that directory (setting yourself as the
 directory owner in the directory's properties - google it). I suppose the same
 kind of problem could occur on Unix, but it never happened to me.
+
+# Notes That Were in `init.el`
+
+    ; This file resides in the directory ".emacs.d". This file is executed after
+    ; "site-start.el". If you want to move .emacs.d to another path than
+    ; "~/.emacs.d", you can modify your "site-start.el" file to include, for
+    ; instance:
+    ;
+    ; (setq user-emacs-directory "C:/Dropbox/.emacs.d/")
+    ; (setq user-init-file "C:/Dropbox/.emacs.d/init.el")
+    ; (load user-init-file)
+    ;
+    ; The two variables are Emacs API variables. They don't control any behaviour
+    ; per se (e.g. ~/.emacs.d will still be created and ~/.emacs OR
+    ; ~/.emacs.d/init.el is still loaded if it exists), but they are taken into
+    ; account by some code, including my own config. My config will ensure that all
+    ; config/data files are stored in "user-emacs-directory" and not in the default
+    ; location.
+    ;
+    ; Note that if you use the default directory, you should *not* load the init
+    ; file in "site-start.el", lest it be loaded twice. If you can't modify
+    ; "site-start.el", you can put the above code in the .emacs file instead.
+    ;
+    ; If you wish to use an emacs daemon on unix, you can add this line to your
+    ; .profile (or equivalent): ". <path_to_.emacs.d>/init.sh", and edit the file to
+    ; point to the .emacs.d/emacs.sh file. Now using the "emacs" command will
+    ; automatically run the emacs daemon if it isn't launched, open a new frame if
+    ; there isn't one visible, and then open your file in an existing frame.
+    ;
+    ; If you wish to use an emacs daemon on windows, you can copy the emacs.bat file
+    ; in your emacs install directory (e.g. "C:\Program Files\emacs"), modify it and
+    ; add the directory to your path. You can then use the script to open a file
+    ; with emacs. If a frame is already open, it will open the file in this frame,
+    ; or it will create a new frame to open the file.
+    ;
+    ; Additionally, you may want to install auctex, follow the instruction for your
+    ; platform. Ideally do it before installing anything else as it may overwrite
+    ; files (notables site-start.el).
+
+    ;; The server socket file will be automatically stored in
+    ;; <user-emacs-directory>/server on Windows, and in a temporary location on
+    ;; linux/mac (inspected variable 'server-socket-dir to view).

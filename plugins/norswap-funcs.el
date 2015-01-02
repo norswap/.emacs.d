@@ -28,7 +28,7 @@
   (yank-pop (- arg)))
 
 (defun yank-below ()
-  "Insert a newline, then yank."
+  "Yank below the current line."
   (interactive)
   (move-end-of-line nil) (newline) (yank))
 
@@ -209,13 +209,6 @@ point)."
   (interactive)
   (let ((fill-column (point-max)))
     (fill-paragraph)))
-
-;;;;; Personal ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun sirius ()
-    "Connects to the sirius UCL server."
-    (interactive)
-    (find-file "/nilaurent@sirius.info.ucl.ac.be:.sirius"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
