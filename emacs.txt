@@ -18,12 +18,21 @@ C-x b       : switch to another buffer
 C-x C-b     : list of buffers & operations on them
     % TODO(norswap): how to use this effectively
 
+M-~         : (not-modified) mark buffer as not modified
+C-x C-q     : toggle buffer read-only
+C-c q       : toggle auto-fill mode (mine)
+
 % ---- Windows -----------------------------------------------------------------
 
 C-x 0       : close this window
 C-x 1       : close other windows
+C-x 2       : split window vertically
+C-x 3       : split window horizontally
 
-%TODO(norswap)
+C-x 4 0     : close this window and kill its buffer
+C-x 4 k     : close next window and kill its buffer
+
+TODO
 
 % ---- Moving Point & Buffer ---------------------------------------------------
 
@@ -46,6 +55,9 @@ pg up   : move backward one screen          (alt: M-v)
 pg dn   : move backward one screen          (alt: C-v)
 C-M-v   : move forward one screen on other window
 S-C-M-v : move backward screen other window
+
+M-<     : move to top of buffer
+M->     : move to bottom of buffer
 
 C-l     : center view on current line
 C-0 C-l : view with current line at the top (alt: C-u 0 C-l)
@@ -95,6 +107,7 @@ C-w <key> : quoted insert - inserts the type char litteraly
 C-s     : incremental search forward (or next result)
 C-r     : incremental search backward (or next result)
 C-M-s   : incremental regex search (or next result)
+M-e     : edit search terms
 
 M-s o   : occur = find all occurences of regexp in current buffer
 
@@ -104,6 +117,14 @@ M-x multi-occur-in-matching-buffers :
     same as occur, but in all buffers matching a regexp
 
 % TODO(norswap): more from emacs_old
+
+% --- Commands & Code ----------------------------------------------------------
+
+M-x <command>       : run emacs command
+M-! <command>       : run shell command
+C-u M-! <command>   : insert M-! output at point
+M-: <expr>          : evaluate elisp expression
+C-u M-: <expr>:     : insert M-: output at point
 
 % --- Useful Minor Modes -------------------------------------------------------
 
@@ -121,6 +142,24 @@ C-x u   : visualize undo tree
     b,f : previous/next branch (on parent)
       d : diff mode
       t : timestamps
+
+% --- Display ------------------------------------------------------------------
+
+C-x C-+ : increase font size
+C-x C-- : decrease font size
+
+% --- Abbrevs ------------------------------------------------------------------
+
+C-x a g     : define abbrev for word before point (add global)
+C-x a l     : idem, major-mode specific (add local)
+C-x a i g   : define expansion for abbrev before point (add inverse global)
+C-x a i l   : idem, major-mode specific (add inverse local)
+C-x a e     : expand abbrev before point
+
+M-x list-abbrevs
+M-x edit-abbrevs
+M-x write-abbrev-file
+M-x read-abbrev-file
 
 % --- Getting Help -------------------------------------------------------------
 

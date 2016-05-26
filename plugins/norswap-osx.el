@@ -31,4 +31,9 @@
 ;; Disable GUI dialogs, which are unresponsive on OSX.
 (setq use-dialog-box nil)
 
+;; Make home and end move to start/end of line instead of start/end of document.
+;; (C-home and C-end still do that)
+(define-key (current-global-map) (kbd "<home>") 'move-beginning-of-line)
+(define-key (current-global-map) (kbd "<end>")  'move-end-of-line)
+
 (provide 'norswap-osx)

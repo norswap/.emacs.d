@@ -18,12 +18,12 @@ if [ ! -f "/usr/bin/emacs_old" ]; then
     sudo mv /usr/bin/emacsclient /usr/bin/emacsclient_old
 fi
 
-sudo ln -sf /usr/local/Cellar/emacs/24.3/bin/emacs /usr/bin/emacs
-sudo ln -sf /usr/local/Cellar/emacs/24.3/bin/emacsclient /usr/bin/emacsclient
-sudo chmod +x ~/.emacs.d/emm.sh
-sudo chmod +x ~/.emacs.d/emmw.sh
-sudo ln -sf ~/.emacs.d/emm.sh /usr/bin/emm
-sudo ln -sf ~/.emacs.d/emmw.sh /usr/bin/emmw
+sudo ln -sf /usr/local/Cellar/emacs/24.4/bin/emacs /usr/bin/emacs
+sudo ln -sf /usr/local/Cellar/emacs/24.4/bin/emacsclient /usr/bin/emacsclient
+sudo chmod +x ~/.emacs.d/em.sh
+sudo chmod +x ~/.emacs.d/emw.sh
+sudo ln -sf ~/.emacs.d/em.sh /usr/bin/em
+sudo ln -sf ~/.emacs.d/emw.sh /usr/bin/emw
 
 osacompile -o Emacs.app ~/.emacs.d/setup/macapp.scpt
 /usr/libexec/PlistBuddy -c "Add :CFBundleIdentifier string eu.norswap.Emacs" \

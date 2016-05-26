@@ -82,7 +82,7 @@ C-x 3     : split window vertically
 C-x 4 0   : delete window, kill buffer in it
 C-x 4 C-o : switch buffer in next window
 C-x 4 f   : open/create file in next window
-C-x 4 k   : kill buffer in next window
+C-x 4 k   : kill buffer and window (next window)
 
 C-x 5 0   : close frame
 C-x 5 2   : create new frame

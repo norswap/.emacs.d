@@ -1,79 +1,60 @@
 Note: everything below is a little bit disorganized. I'll do something about
-that, eventually. But note there is an easy setup script for OSX, and that the
-scripts `emm.sh` and `emmw.sh`, which were made for OSX should work on Linux
-(but this has not yet been tested), where they should replace `em.sh` and
-`emw.sh`.
+that, eventually. But note there is an easy setup script for OSX. There also
+needs to be a mention of `emw-win.sh`. Generally, things haven't been tested on
+Linux since they changed significantly recently.
 
 # Installation
 
-- Run `git clone git@github.com:norswap/.emacs.d.git EMACS_PARENT/.emacs.d`,
-  replacing `EMACS_PARENT` by the directory where you want to put repository.
+- Run `git clone git@github.com:norswap/.emacs.d.git .emacs.d` in the directory
+  where you want the `.emacs.d` directory (whose content is that is that of this
+  repository) to appear.
 
-- Optionally, customize and symlink `site-start.el` from your `site-lisp`
-  directory to the `site-start.el` in this directory. Since `site-start.el` is
-  the first thing emacs looks at, you can change where it looks for your emacs
-  configureation folder (usually named `.emacs.d`).
+- Symlink `~/.emacs.d` to the repository (or just clone it there in the first
+  place). The Unix command is:
 
-  The typical Unix command is:
+    ln -s emacs.d ~/.emacs.d
 
-    sudo ln -s ~/.emacs.d/site-start.el
-        /usr/local/share/emacs/site-lisp/site-start.el
-
-  On Windows (*), the `site-lisp` directory is inside the emacs install directory
-  (if in doubt, try `C:\Program Files\emacs`).
-
-- Alternatively, symlink `.~/.emacs.d` to the repository (or just clone it there
-  in the first place).
-
-    ln -s EMACS_PARENT/.emacs.d ~/.emacs.d
+  On Windows, you can use the [Link Shell Extension][lse] to make a symlink to
+  `C:/Users/USERNAME/AppData/Roaming/.emacs.d`. However, if you have a `HOME`
+  environment variable defined, the symlink needs to be made inside that
+  directory (I have my home set to `C:/Users/USERNAME`).
 
 - Add emacs launch scripts to your `PATH` environment variable.
 
-  The launch scripts are `emacs.bat` and `emacs-wait.bat` on Windows; and
-  `em.sh`, `emw.sh` on Linux.
+  The launch scripts are `em.bat` and `emw.bat` on Windows; and
+  `em.sh`, `emw.sh` on Unix (tested on OSX only).
 
-  \[Windows\] Customize the variables at the top of `emacs.bat` and
-  `emacs-wait.bat` with the location of your emacs installation and the location
-  of this repository.
+  \[Windows\] Make sure the `bin` directory of the emacs installation directory
+  is in your PATH environment variable.
 
-  There is not a single terminal command to permanently and cleanly add a path
-  to PATH, regardless of OS (stupid, right?), so google the procedure for you
-  system.
+- To quickly compile all elisp files in this repository, type `C-u 0 M-x
+  byte-recompile-directory` inside emacs and point to the directory. If you edit
+  the files later inside emacs and using my config, the files will recompile
+  automatically.
 
-  Alternatively, add symlinks (*) to the scripts in a directory that you already
-  know to be on the path (e.g. `/usr/local/bin` or `C:\Windows\System32`).
-
-- For speed compile all elisp file by typing `C-u 0 M-x
-  byte-recompile-directory` inside emacs. The files will recompile automatically
-  if edited inside emacs.
-
-My emacs launch scripts will setup an emacs server the first time they are
-used. Subsequent uses of the command will open a buffer in the existing emacs
-window. For each system there is a regular and a waiting version. The waiting
-version will wait until the opened buffer is closed to return from the
+My emacs launch scripts will setup an emacs server the first time they are used.
+Subsequent uses of the command will open a buffer in the existing emacs window.
+For each system there is a regular (`em`) and a waiting version (`emw`). The
+waiting version will wait until the opened buffer is closed to return from the
 script. Those are useful to edit git commit messages, for instance.
-
-(*) To make symlinks in Windows, use [LinkShellExtension][lse].
-
-[lse]: http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html
 
 # Windows Shell Integration
 
 - To use the registry tweaks described next, you'll need to copy or symlink
-  `emacs.bat` to `%WINDIR%`. The registry apparently does not use `%PATH%` for
+  `em.bat` to `%WINDIR%`. The registry apparently does not use `%PATH%` for
   path resolution, but at least uses `%WINDIR%`.
 
-- Merging the file `registry/noext.reg` with the registry associates files with
+- Merging the file `regedit/noext.reg` with the registry associates files with
   without extensions to emacs. It is equivalent to typing the following commands
   in a terminal:
 
       assoc .=noext
-      ftype noext=emacs "%1"
+      ftype noext=em "%1"
 
-- Merging the file `registry/unknown.reg` with the registry associates files
+- Merging the file `regedit/unknown.reg` with the registry associates files
   with unkown extensions to emacs.
 
-- Merging the file `registry/openwith.reg` with the registry add an "open with
+- Merging the file `regedit/openwith.reg` with the registry add an "open with
   emacs" item to the context menu of all files.
 
 # Mac OSX Shell Integration
@@ -106,7 +87,7 @@ Groups > Login Items`.
 
 If you're into such frivolity, you can give the app a nice icon to be shown in
 spotlight or launchpad. Using the Finder, navigate to
-`/usr/local/Cellar/emacs/24.3`, right click on `Emacs.app`, and click on Show
+`/usr/local/Cellar/emacs/24.5`, right click on `Emacs.app`, and click on Show
 Package Contents. Do the same for `/Applications/Emacs.app`. Copy the
 `Emacs.icns` file from `Contents/Resources` of the app in `Cellar` to the
 `Contents/Resources` of the app in `Applications` one. Delete `applet.icns` and

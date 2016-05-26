@@ -4,10 +4,14 @@
 
 (setq package-archives '(
     ("gnu"          . "http://elpa.gnu.org/packages/")
-    ("marmalade"    . "http://marmalade-repo.org/packages/")
+    ;("marmalade"    . "http://marmalade-repo.org/packages/")
     ("melpa"        . "http://melpa.milkbox.net/packages/")))
 
 (package-initialize)
+
+;;;;; PACKAGES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; TODO
 
 ;;;; DISPLAY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -21,10 +25,20 @@
 ;; Display the column number in the mode line.
 (setq column-number-mode t)
 
-;; As-you-type substring completion for buffers, files, functions & more.
-(setq ido-enable-flex-matching 1)
-(setq ido-everywhere 1)
-(ido-mode 1)
+;; ;; As-you-type substring completion for buffers, files, functions & more.
+;; (setq ido-enable-flex-matching 1)
+;; (setq ido-everywhere 1)
+;; ;; Don't switch to other visible frame when opening an already visible buffer.
+;; (setq ido-default-buffer-method 'selected-window)
+;; (setq ido-default-file-method 'selected-window)
+;; (ido-mode 1)
+
+;; NOTE: ido was giving me pains, hence:
+
+;; Preview completions for buffers.
+(icomplete-mode 1)
+
+(setq read-buffer-completion-ignore-case t)
 
 ;; Make buffer names unique by including part of file path.
 (require 'uniquify)
@@ -94,6 +108,26 @@ Emacs, by setting process-list to nil before exiting."
 
 (require 'undo-tree)
 (global-undo-tree-mode)
+
+;; Recenter the screen around the current search result when iterating through
+;; them.
+(defadvice
+  isearch-repeat-forward
+  (after isearch-repeat-forward-recenter activate)
+  (recenter))
+(defadvice
+  isearch-repeat-backward
+  (after isearch-repeat-backward-recenter activate)
+  (recenter))
+
+;; Search accross all whitespace types.
+(setq search-whitespace-regexp "[ \t\r\n]+")
+
+;; New buffers start in text-mode, not fundamental fill.
+(setq-default major-mode 'text-mode)
+
+;; Same for initial *scratch*.
+(setq initial-major-mode 'text-mode)
 
 ;;;; TEXT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -241,6 +275,12 @@ killed or yanked) from the kill ring."
   (force-window-update (window-buffer))
   (redisplay t))
 
+(defun unfill-paragraph ()
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive)
+  (let ((fill-column (point-max)))
+    (fill-paragraph)))
+
 ;;;; KEYBINDS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; How to define a new prefix.
@@ -267,13 +307,14 @@ killed or yanked) from the kill ring."
 (norswap-key (kbd "M-n")     'forward-paragraph)
 (norswap-key (kbd "C-z")     'undo)
 (norswap-key (kbd "C-S-z")   'undo-tree-redo)
-(norswap-key (kbd "M-S-q")   'unfill-paragraph)
+(norswap-key (kbd "M-Q")     'unfill-paragraph)
 (norswap-key (kbd "C-c t")   'toggle-trailing-whitespace-handling)
 (norswap-key (kbd "C-c e")   'eval-print-last-sexp)
 (norswap-key (kbd "C-c q")   'auto-fill-mode) ; toggle
 (norswap-key (kbd "C-c TAB") 'indent-region)
 (norswap-key (kbd "C-c SPC") 'ace-jump-mode)
-(norswap-key (kbd "M-S-y")   'yank-pop-forward)
+(norswap-key (kbd "M-S-y")   'yank-pop-forward) ;; (osx)
+(norswap-key (kbd "M-Y")     'yank-pop-forward) ;; (win)
 (norswap-key (kbd "M-C-y")   'delete-kill-ring-entry)
 (norswap-key (kbd "C-c C-<") 'reset-kill-ring)
 (norswap-key (kbd "C-x 4 k") 'kill-next-window-and-buffer)
@@ -327,11 +368,26 @@ killed or yanked) from the kill ring."
 (defvar backup-dir (expand-file-name (concat user-emacs-directory "backup/")))
 (setq backup-directory-alist `(( ".*" . ,backup-dir)))
 
+;; By default emacs makes a backup of a file the first time you save a file
+;; after visiting it. Killing then reopening the buffer will create a new backup
+;; when saving again (new file or overwrite, see below).
+
+(setq
+ backup-by-copying t    ;; presumably safer
+ version-control t      ;; keep multiple versions
+ delete-old-versions t  ;; rotate backups
+ kept-old-versions 1    ;; keep the oldest version (e.g. pristine config)
+ kept-new-versions 10   ;; keep 10 most recent versions
+ )
+
 ;; All files are autosaved in user-emacs-directory/autosave.
 (defvar autosave-dir
   (expand-file-name (concat user-emacs-directory "autosave/")))
 (setq auto-save-list-file-prefix (concat autosave-dir "/"))
 (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+
+;; By default, saves after 30 seconds of idle time, only if there has been more
+;; than 300 input events. (auto-save-timeout, auto-save-interval)
 
 ;;;; MAJOR-MODES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -348,6 +404,10 @@ killed or yanked) from the kill ring."
 (custom-set-variables
  '(ps-print-header nil)
  '(ps-top-margin 72))
+
+(setq lua-indent-level 4)
+;; Indent multiline string like comments
+(setq lua-indent-string-contents t)
 
 ;;;; LISP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -382,6 +442,9 @@ killed or yanked) from the kill ring."
 
 ;;;; WINDOWS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar archive-zip-extract)
+(defvar dired-mode-map)
+(defvar file-name-buffer-file-type-alist)
 (when (eq system-type 'windows-nt)
 
   ;; Make unzip work also on Windows. unzip from gnuwin32 needs to be installed
@@ -393,17 +456,14 @@ killed or yanked) from the kill ring."
   (eval-after-load "dired"
     '(define-key dired-mode-map (kbd "<f3>")
        (lambda () (interactive)
-	 (w32-shell-execute
-	  1 (dired-replace-in-string "/" "\\" (dired-get-filename))))))
+	 (with-no-warnings (w32-shell-execute
+	  1 (dired-replace-in-string "/" "\\" (dired-get-filename)))))))
 
   ;; Windows clipboard is UTF-16LE.
   (set-clipboard-coding-system 'utf-16le-dos)
 
   ;; Batch files need windows-style newlines.
   (push '("\\.bat$" . nil) file-name-buffer-file-type-alist)
-
-  ;; Use putty's plink.exe (must be reachable from %PATH%) for ssh connections.
-  (eval-after-load "tramp" '(setq tramp-default-method "plink"))
 
   (setq server-auth-dir (car desktop-path))
 
@@ -439,24 +499,59 @@ killed or yanked) from the kill ring."
   (exec-path-from-shell-initialize)
 
   ;; Disable GUI dialogs, which are unresponsive on OSX.
-  (setq use-dialog-box nil))
+  (setq use-dialog-box nil)
+
+  ;; OSX glitches with visible-bell. Blink the mode line instead.
+  (setq visible-bell nil)
+  (setq ring-bell-function
+        (lambda ()
+          (invert-face 'mode-line)
+          (run-with-timer 0.1 nil 'invert-face 'mode-line))))
+
+;;;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Don't warn about TeX-mode-map being a free variable.
+(defvar TeX-mode-map)
+
+(add-hook 'LaTeX-mode-hook
+          (lambda ()
+            (define-key TeX-mode-map (kbd "C-c C-n") 'TeX-command-master)))
+
+;; This is necessary for AucTeX to figure out it needs to run BibTeX.
+(setq TeX-parse-self t) ; Enable parse on load.
+(setq TeX-auto-save t)  ; Enable parse on save.
+
+;;;; WORKAROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun workaround-markdown-fontify-buffer-wiki-links-empty ()
+  "Empty replacement for `markdown-fontify-buffer-wiki-links` due to hanging bug."
+  (interactive))
+
+(eval-after-load "markdown-mode"
+  '(progn
+     (fset 'markdown-fontify-buffer-wiki-links
+           'workaround-markdown-fontify-buffer-wiki-links-empty)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Start the Emacs daemon, which allows opning all files in a single Emacs
 ;; instance.
+
 (server-start)
+
+;;;; MANUAL SETUP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; Fix TRAMP on Windows
+; M-x byte-compile-file, then enter:
+; C:/Chocolatey/lib/Emacs.24.3/tools/emacs-24.3/lisp/net/tramp-sh.el
+; and restart emacs
+; use no method or plink
 
 ;;;; TODO ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; - Handle window splitting so that it is appropriate.
 ;;   Maybe touch upon the "C-x 4 k" & "C-x 4 j" keybinds?
-;;   See Casey's stuff below.
-
-;; (defun casey-never-split-a-window
-;;   "Never, ever split a window.  Why would anyone EVER want you to do that??"
-;;   nil)
-;; (setq split-window-preferred-function 'casey-never-split-a-window)
 
 ;; I think the best to do it would be to use the info in
 ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Choosing-Window.html
@@ -464,11 +559,6 @@ killed or yanked) from the kill ring."
 ;; certain regex to a certain window. Multiple (regex, window) pairs would be
 ;; allowable and there would be a simple default action when the variable
 ;; corresponding to the buffers are undefined (e.g. put in bottom right buffer).
-
-;; - Make handy backups of edited files.
-;;   Needs at least to backup on save if not bigger than X; and the keep the
-;;      N latest versions. Maybe use some spacing?
-;;   Look at Casey's .emacs, it might help.
 
 ;; - A grid: divide the frame into an XxY invisible grid and allow to grow
 ;;   window to occupy multiple grid sections; also handle direction oriented
@@ -479,7 +569,7 @@ killed or yanked) from the kill ring."
 ;; - A way to group files into projects that can be closed and re-opened
 ;;   simultaneously.
 
-;; - Remove warnings when compiling on OSX.
+;; - Look at Casey's .emacs, it might help.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
