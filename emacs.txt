@@ -161,6 +161,10 @@ M-x edit-abbrevs
 M-x write-abbrev-file
 M-x read-abbrev-file
 
+% --- Code ---------------------------------------------------------------------
+
+M-x electric-indent-mode    : toggle automatic indents
+
 % --- Getting Help -------------------------------------------------------------
 
 % TODO(norswap): more from emacs_old
