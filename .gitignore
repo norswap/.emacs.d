@@ -13,3 +13,4 @@
 bookmarks
 *.elc
 *.exe
+/elpa/gnupg/
