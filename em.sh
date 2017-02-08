@@ -4,7 +4,7 @@
 # TODO: export EDITOR to waiting version
 
 # This didn't use to be necessary, but apple motherfuckers messed everything up.
-source ./Users/nilaurent/.bash_profile
+source /Users/nilaurent/.bash_profile
 
 # Set to location of your emacsclient if not on path.
 ECLIENT=/usr/local/bin/emacsclient

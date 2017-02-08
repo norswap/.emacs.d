@@ -14,3 +14,4 @@ bookmarks
 *.elc
 *.exe
 /elpa/gnupg/
+/smex-items

@@ -73,8 +73,6 @@ C-x C-p : select current-page
 
 % ---- Deleting & Copying ------------------------------------------------------
 
-% Where "kill" means "delete and copy".
-
 C-w     : kill region
 M-w     : copy region
 C-k     : kill line after point
@@ -164,6 +162,11 @@ M-x read-abbrev-file
 % --- Code ---------------------------------------------------------------------
 
 M-x electric-indent-mode    : toggle automatic indents
+
+% --- Latex --------------------------------------------------------------------
+
+C-c C-n                     : next tex command (mine, originally C-c C-c)
+C-c C-a                     : run all tex commands
 
 % --- Getting Help -------------------------------------------------------------
 

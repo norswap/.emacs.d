@@ -13,6 +13,9 @@
 
 ; TODO
 
+(add-to-list 'load-path (concat user-emacs-directory "lib"))
+(require 'livedown) ;; requires npm install -g livedown
+
 ;;;; DISPLAY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Don't produce a bell sound on some event (like scroll-up at the top) but
@@ -24,21 +27,6 @@
 
 ;; Display the column number in the mode line.
 (setq column-number-mode t)
-
-;; ;; As-you-type substring completion for buffers, files, functions & more.
-;; (setq ido-enable-flex-matching 1)
-;; (setq ido-everywhere 1)
-;; ;; Don't switch to other visible frame when opening an already visible buffer.
-;; (setq ido-default-buffer-method 'selected-window)
-;; (setq ido-default-file-method 'selected-window)
-;; (ido-mode 1)
-
-;; NOTE: ido was giving me pains, hence:
-
-;; Preview completions for buffers.
-(icomplete-mode 1)
-
-(setq read-buffer-completion-ignore-case t)
 
 ;; Make buffer names unique by including part of file path.
 (require 'uniquify)
@@ -90,7 +78,7 @@
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
   "Prevent \"Active processes exist\" queries when you quit
 Emacs, by setting process-list to nil before exiting."
-  (flet ((process-list nil)) ad-do-it))
+  (cl-flet ((process-list nil)) ad-do-it))
 
 ;; Disable the creation of .#filename lockfiles on some systems (such as OSX).
 ;; Lockfiles detect collision between multiple edits of the same file on access
@@ -129,6 +117,34 @@ Emacs, by setting process-list to nil before exiting."
 ;; Same for initial *scratch*.
 (setq initial-major-mode 'text-mode)
 
+;;;; COMPLETION ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Using ido and smex for minibuffer completion almost everywhere.
+
+(ido-mode t)
+(ido-everywhere t)                  ;; enhanced by package ido-ubiquitous
+(ido-vertical-mode t)               ;; from package ido-vertical-mode
+(ido-yes-or-no-mode t)              ;; from package ido-yes-or-no
+(global-set-key (kbd "M-x") 'smex)  ;; from package smex
+
+;; from package flx-ido
+;; enables matching on words beginning (e.g. tcm for TeX-command-master)
+(flx-ido-mode t)
+
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
+
+;; Don't switch to other visible frame when opening an already visible buffer.
+;; (Not too sure about this one, keep the default for now.)
+;; (setq ido-default-buffer-method 'selected-window)
+;; (setq ido-default-file-method 'selected-window)
+
+;; TODO try ivy (seems a bit better than ido)
+;; ace-window (jump between window, not buffers)
+
+;; TODO document
+;; cycle with C-n / C-p
+;; C-j force selection
+
 ;;;; TEXT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Wrap text at column 80 with M-q or automatically (see below).
@@ -157,10 +173,9 @@ Emacs, by setting process-list to nil before exiting."
 (set-face-attribute 'fixed-pitch nil :height 90 :family "Courier New")
 
 (when (eq system-type 'darwin)
-  ;; Works both in a dedicated window and in the console.
-  (add-to-list 'default-frame-alist '(font . "Menlo Regular 11")))
-
-;;(set-frame-font "Menlo Regular 11" nil t)
+   ;; GUI-only (but set to console font)
+   (set-face-attribute 'default nil
+                :family "Monaco" :height 120 :weight 'normal))
 
 ;;;; THEME ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -349,14 +364,15 @@ killed or yanked) from the kill ring."
 
 ;; Save the session (open buffers) in a different directory for each machine.
 ;; Useful if your .emacs.d is on Dropbox.
-(let ((dirname (concat user-emacs-directory "files-" system-name
+(let ((dirname (concat user-emacs-directory "files-" (system-name)
                        "-" (user-real-login-name))))
   (unless (file-exists-p dirname)
     (make-directory dirname))
   (setq desktop-path `(,dirname)))
 
+
 ;; Save the session (open buffers) between emacs invocations.
-(desktop-save-mode 1)
+(desktop-save-mode)
 
 ;; Autosave the desktop (don't wait untill emacs exits).
 (add-hook 'auto-save-hook (lambda () (desktop-save-in-desktop-dir)))
@@ -444,7 +460,7 @@ killed or yanked) from the kill ring."
 
 (defvar archive-zip-extract)
 (defvar dired-mode-map)
-(defvar file-name-buffer-file-type-alist)
+;(defvar file-name-buffer-file-type-alist)
 (when (eq system-type 'windows-nt)
 
   ;; Make unzip work also on Windows. unzip from gnuwin32 needs to be installed
@@ -463,7 +479,7 @@ killed or yanked) from the kill ring."
   (set-clipboard-coding-system 'utf-16le-dos)
 
   ;; Batch files need windows-style newlines.
-  (push '("\\.bat$" . nil) file-name-buffer-file-type-alist)
+  (push '("\\.bat$" . nil) file-coding-system-alist)
 
   (setq server-auth-dir (car desktop-path))
 
@@ -510,16 +526,15 @@ killed or yanked) from the kill ring."
 
 ;;;; LATEX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Don't warn about TeX-mode-map being a free variable.
-(defvar TeX-mode-map)
-
 (add-hook 'LaTeX-mode-hook
           (lambda ()
-            (define-key TeX-mode-map (kbd "C-c C-n") 'TeX-command-master)))
+            (local-set-key (kbd "C-c C-n") 'TeX-command-master)))
 
 ;; This is necessary for AucTeX to figure out it needs to run BibTeX.
 (setq TeX-parse-self t) ; Enable parse on load.
 (setq TeX-auto-save t)  ; Enable parse on save.
+
+;; Also see C-c C-a (TeX-command-run-all) to get everything done.
 
 ;;;; WORKAROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
