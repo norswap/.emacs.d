@@ -15,6 +15,7 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "lib"))
 (require 'livedown) ;; requires npm install -g livedown
+(require 'toggle-letter-case)
 
 ;;;; DISPLAY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -337,6 +338,7 @@ killed or yanked) from the kill ring."
 (norswap-key (kbd "C-c C-c") 'comment-region)
 (norswap-key (kbd "C-c C-v") 'uncomment-region)
 (norswap-key (kbd "C-c w")   'delete-region)
+(norswap-key (kbd "M-l")     'toggle-letter-case)
 
 ;; Sane mouse scrolling (that does not accelerate to oblivion).
 (norswap-key (kbd "<wheel-up>") (lambda () (interactive) (scroll-down 5)))
@@ -418,6 +420,13 @@ killed or yanked) from the kill ring."
 
 ;; Some settings for ps-print-buffer.
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (clojure-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell color-theme cmake-mode buffer-move auctex ace-jump-mode)))
  '(ps-print-header nil)
  '(ps-top-margin 72))
 
