@@ -15,3 +15,4 @@ bookmarks
 *.exe
 /elpa/gnupg/
 /smex-items
+emacs_backtrace.txt
