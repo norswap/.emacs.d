@@ -15,6 +15,7 @@ C-x C-s     : save buffer
 C-x C-w     : save buffer as different file
 C-x k       : close buffer
 C-x b       : switch to another buffer
+C-x C-v     : find alternative file (use to reload from disk)    
 C-x C-b     : list of buffers & operations on them
     % TODO(norswap): how to use this effectively
 
@@ -146,6 +147,9 @@ C-x u   : visualize undo tree
 C-x C-+ : increase font size
 C-x C-- : decrease font size
 
+C-x n n : narrow to region
+C-x n w : widen to whole buffer
+
 % --- Abbrevs ------------------------------------------------------------------
 
 C-x a g     : define abbrev for word before point (add global)
@@ -184,5 +188,7 @@ M-x diff: diff new and old file
     you should leave the directly on if you want to use the default!
 
 M-x diff-buffer-with-file
+
+C-x RET f : encoding/newlines for saving file (e.g. dos/unix/utf-8-unix)
 
 % ------------------------------------------------------------------------------

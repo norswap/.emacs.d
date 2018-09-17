@@ -176,7 +176,10 @@ Emacs, by setting process-list to nil before exiting."
 (when (eq system-type 'darwin)
    ;; GUI-only (but set to console font)
    (set-face-attribute 'default nil
-                :family "Monaco" :height 120 :weight 'normal))
+                       :family "Monaco" :height 120 :weight 'normal)
+   ;; Set height accordingly.
+   (set-face-attribute 'fixed-pitch nil
+                       :height 120 :family "Courier New"))
 
 ;;;; THEME ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
