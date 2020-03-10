@@ -14,11 +14,8 @@
 ; TODO
 
 (add-to-list 'load-path (concat user-emacs-directory "lib"))
-(add-to-list 'load-path (concat user-emacs-directory "lib/mozart"))
 (require 'livedown) ;; requires npm install -g livedown
 (require 'toggle-letter-case)
-
-(defvar *OZHOME* "~/mozart")
 
 ;;;; DISPLAY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -433,9 +430,6 @@ killed or yanked) from the kill ring."
 (setq lua-indent-level 4)
 ;; Indent multiline string like comments
 (setq lua-indent-string-contents t)
-
-(autoload 'oz-mode "oz" "oz major mode." t)
-(add-to-list 'auto-mode-alist '("\\.oz\\'" . oz-mode))
 
 ;;;; LISP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
