@@ -33,6 +33,7 @@ C-x 3       : split window horizontally
 C-x 4 0     : close this window and kill its buffer
 C-x 4 k     : close next window and kill its buffer
 
+C-x 5 0     : close this frame
 TODO
 
 % ---- Moving Point & Buffer ---------------------------------------------------
@@ -149,6 +150,11 @@ C-x C-- : decrease font size
 
 C-x n n : narrow to region
 C-x n w : widen to whole buffer
+
+% --- Help ---------------------------------------------------------------------
+
+C-h m : view active modes
+C-h l : command history
 
 % --- Abbrevs ------------------------------------------------------------------
 
