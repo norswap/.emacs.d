@@ -15,4 +15,5 @@ bookmarks
 *.exe
 /elpa/gnupg/
 /smex-items
+/ido.last
 emacs_backtrace.txt

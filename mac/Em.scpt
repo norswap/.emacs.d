@@ -11,12 +11,12 @@ on open thefiles
 	repeat with thefile in thefiles
 		set pfiles to pfiles & "\"" & POSIX path of thefile & "\" "
 	end repeat
-    do shell script "em " & pfiles
+    do shell script "sudo -u norswap --login em " & pfiles
     tell application "Emacs" to activate
 end open
 
 # Called when open is not called.
 on run {}
-    do shell script "em"
-	tell application "Emacs" to activate
+    do shell script "sudo -u norswap --login em"
+    tell application "Emacs" to activate
 end run
