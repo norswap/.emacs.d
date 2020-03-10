@@ -183,6 +183,8 @@ Emacs, by setting process-list to nil before exiting."
 
 ;;;; THEME ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO update to color-theme-modern
+
 (require 'color-theme)
 (setq color-theme-is-global t)  ; Set color theme on all frames.
 (color-theme-initialize)
@@ -422,16 +424,8 @@ killed or yanked) from the kill ring."
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Some settings for ps-print-buffer.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (clojure-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell color-theme cmake-mode buffer-move auctex ace-jump-mode)))
- '(ps-print-header nil)
- '(ps-top-margin 72))
+(setq ps-print-header nil)
+(setq ps-top-margin 72)
 
 (setq lua-indent-level 4)
 ;; Indent multiline string like comments
@@ -550,7 +544,6 @@ killed or yanked) from the kill ring."
 
 ;;;; WORKAROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defun workaround-markdown-fontify-buffer-wiki-links-empty ()
   "Empty replacement for `markdown-fontify-buffer-wiki-links` due to hanging bug."
   (interactive))
@@ -559,6 +552,18 @@ killed or yanked) from the kill ring."
   '(progn
      (fset 'markdown-fontify-buffer-wiki-links
            'workaround-markdown-fontify-buffer-wiki-links-empty)))
+
+;;;; CUSTOM-SET-VARIABLES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Variables set by emacs features and via the customization interface.
+;; I try to only leave stuff here that has to be updated automatically.
+;; There should be only one instance of this function call accross the
+;; init files.
+
+(custom-set-variables
+ '(package-selected-packages
+   (quote
+    (python-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell color-theme cmake-mode clojure-mode buffer-move auctex ace-jump-mode))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
