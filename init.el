@@ -128,6 +128,10 @@ Emacs, by setting process-list to nil before exiting."
 (ido-yes-or-no-mode t)              ;; from package ido-yes-or-no
 (global-set-key (kbd "M-x") 'smex)  ;; from package smex
 
+;; When ido cannot file a completion in the current dir, do not attempt to
+;; switch dir (annoying when creating new files).
+(setq ido-auto-merge-work-directories-length -1)
+
 ;; from package flx-ido
 ;; enables matching on words beginning (e.g. tcm for TeX-command-master)
 (flx-ido-mode t)
@@ -483,6 +487,10 @@ killed or yanked) from the kill ring."
   ;; Batch files need windows-style newlines.
   (push '("\\.bat$" . nil) file-coding-system-alist)
 
+  ;; Note: This is only used when TCP is used (so only on Windows). Otherwise,
+  ;; emacs uses local sockets and the variable `server-socket-dir` is used.
+  ;; I could try to uniformize this, but everything works as-is, and I'm loath
+  ;; to spend time trying to debug finicy startup issues.
   (setq server-auth-dir (car desktop-path))
 
   (set-face-attribute 'default nil :font "Consolas 9"))
