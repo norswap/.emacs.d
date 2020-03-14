@@ -183,12 +183,8 @@ Emacs, by setting process-list to nil before exiting."
 
 ;;;; THEME ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO update to color-theme-modern
-
-(require 'color-theme)
-(setq color-theme-is-global t)  ; Set color theme on all frames.
-(color-theme-initialize)
-(color-theme-billw)             ; My color theme of choice.
+;; My color theme of choice.
+(load-theme 'billw t) 
 
 ;; Spaces between text and window boundaries.
 (set-face-attribute 'fringe nil
@@ -556,14 +552,24 @@ killed or yanked) from the kill ring."
 ;;;; CUSTOM-SET-VARIABLES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Variables set by emacs features and via the customization interface.
-;; I try to only leave stuff here that has to be updated automatically.
-;; There should be only one instance of this function call accross the
-;; init files.
+;; I try to only leave stuff here that has to be updated automatically. There
+;; should be only one instance of these function calls accross the init files.
 
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (python-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell color-theme cmake-mode clojure-mode buffer-move auctex ace-jump-mode))))
+    (color-theme-modern python-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell cmake-mode clojure-mode buffer-move auctex ace-jump-mode))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
