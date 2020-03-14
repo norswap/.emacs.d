@@ -71,20 +71,35 @@ EMACS_DEFAULT_FILE=${EMACS_DEFAULT_FILE:-"~/.emacs.d/scratch"}
 ARGS=("$@")
 ARGS=${ARGS:-"$EMACS_DEFAULT_FILE"}
 
+# Get the number of "displayed" frames, and check if emacs is running at all.
+FRAMES="$(emacsclient -e "(length (frame-list))" 2>/dev/null)"
+RUNNING=$?
+FRAMES=${FRAMES:-0}
+
+# For some reason, we might end up with zombie emacs processes,
+# clean them up or it will mess up the rest of the logic.
+if [[ $RUNNING != 0 ]]; then
+    EMACS_LOCATION="$(readlink $(which emacs) || which emacs || norswap_not_found)"
+    pgrep -f "$EMACS_LOCATION" | awk '{ print $1 }' | xargs kill -9
+fi                      
+
 # Is emacs running with --daemon or --bg-daemon flag?
-pgrep -if "emacs.*daemon" > /dev/null; DAEMON=$?
+# If yes, then an additional frame is being counted compared to the real count.
+pgrep -if "emacs.*daemon" > /dev/null && FRAMES=$((FRAMES - 1))
+
+# Emacs is visible if there are visible frames.
+VISIBLE=$([[ "$FRAMES" -gt 0 ]]; echo $?)
 
 # Number of listed frames to be reached for a frame to be actually visible
 # (--daemon incurs a fake frame).
-FRAMES=1; [[ $DAEMON == 0 ]] && FRAMES=$((FRAMES + 1))
-
-TMP="$(emacsclient -e "(<= $FRAMES (length (frame-list)))" 2>/dev/null)"
-
-# Is emacs running at all?
-RUNNING=$?
-
+# FRAMES=1; [[ $DAEMON == 0 ]] && FRAMES=$((FRAMES + 1))
+# TMP="$(emacsclient -e "(<= $FRAMES (length (frame-list)))" 2>/dev/null)"
 # Is there a visible frame?
-[[ "$TMP" == t ]]; VISIBLE=$?
+# [[ "$TMP" == t ]]; VISIBLE=$?
+
+# echo running: $RUNNING > /tmp/debugem
+# echo visible: $VISIBLE >> /tmp/debugem
+# echo frames: $FRAMES >> /tmp/debugem
 
 # Default frame dimensions.
 F='((width . 120) (height . 50))'
@@ -97,14 +112,23 @@ if [[ $RUNNING != 0 ]]; then
     # and not doing so causes the desktop not to be loaded on OSX, or to
     # have an annoying prompt on Linux.
     rm -f ~/".emacs.d/files-$(hostname)-$(whoami)/.emacs.desktop.lock"
-    
+
     # The daemon is not running, start the daemon and open a frame.
-    emacsclient $N $T -a '' -c -F "$F" "${ARGS[@]}" > /tmp/emacs-startup 2>&1
+    # echo 1 emacsclient $N $T -a '' -c -F "$F" "${ARGS[@]}" >> /tmp/debugem
+    emacsclient $N $T -a '' -c -F "$F" "${ARGS[@]}" 2> /tmp/emacs-startup
     
 elif [[ $VISIBLE != 0 ]]; then
+    # Pre-active in case of prompt in Emacs.
+    osascript -e 'activate application "Emacs"'
+    
     # There are no visible frames, open one.
+    # echo 2 emacsclient $N $T -c -F "$F" "${ARGS[@]}" >> /tmp/debugem
     emacsclient $N $T -c -F "$F" "${ARGS[@]}"
 else
+    # Pre-activate in case of prompt in Emacs.
+    osascript -e 'activate application "Emacs"'
+    
+    # echo 3 emacsclient $N $T "${ARGS[@]}" >> /tmp/debugem
     emacsclient $N $T "${ARGS[@]}"
 fi
 

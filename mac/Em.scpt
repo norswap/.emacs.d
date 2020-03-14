@@ -1,9 +1,5 @@
-# This is the Mac OSX Apple Script used to generate an application that can both
+# This is the macOS Apple Script used to generate an application that can both
 # launch and open Emacs, while enforcing a single Emacs server.
-
-# IMPORTANT: You should always launch Emacs using this app, not the app linked
-# to Emacs Dock icon. Doing so will result in unwanted results such as opening
-# new files via Finder or console to a new frame.
 
 # Called when opening (a) file(s).
 on open thefiles
@@ -11,12 +7,18 @@ on open thefiles
 	repeat with thefile in thefiles
 		set pfiles to pfiles & "\"" & POSIX path of thefile & "\" "
 	end repeat
-    do shell script "sudo -u norswap --login em " & pfiles
-    tell application "Emacs" to activate
+    
+    # Note "sudo -u norswap --login em" failed because TMPDIR wasn't set
+    # (this was very hard to debug).
+    do shell script "bash --login em " & pfiles
+    
+    # Used to be 'tell application "Emacs" to activate"
+    # But that would cause the line to be run at compile-time (?!!)    
+    activate application "Emacs"
 end open
 
 # Called when open is not called.
 on run {}
-    do shell script "sudo -u norswap --login em"
-    tell application "Emacs" to activate
+    do shell script "bash --login em"
+    activate application "Emacs"
 end run
