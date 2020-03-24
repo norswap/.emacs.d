@@ -188,7 +188,7 @@ Emacs, by setting process-list to nil before exiting."
 ;;;; THEME ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; My color theme of choice.
-(load-theme 'billw t) 
+(load-theme 'billw t)
 
 ;; Spaces between text and window boundaries.
 (set-face-attribute 'fringe nil
@@ -279,20 +279,22 @@ killed or yanked) from the kill ring."
   (kill-buffer (window-buffer (selected-window)))
   (delete-window (selected-window)))
 
+(setq-default show-trailing-whitespace t)
 (make-local-variable 'handle-trailing-whitespace)
-(setq-default handle-trailing-whitespace nil)
-(setq-default show-traling-whitespace nil)
+(setq-default handle-trailing-whitespace t)
 (add-hook 'before-save-hook
           (lambda ()
             (if handle-trailing-whitespace
                 (delete-trailing-whitespace))))
 
+(add-hook 'minibuffer-setup-hook
+          (lambda () (setq show-trailing-whitespace nil)))
+
 (defun toggle-trailing-whitespace-handling ()
-  "Toggle trailing whitespace handling mode. When 'handled', trailing whitespace
-  is highlighted and deleted on save."
+  "Toggle trailing whitespace handling mode. When 'handled',
+  trailing whitespace is deleted on save."
   (interactive)
   (setq handle-trailing-whitespace (not handle-trailing-whitespace))
-  (setq show-trailing-whitespace   (not show-trailing-whitespace))
   (force-window-update (window-buffer))
   (redisplay t))
 
