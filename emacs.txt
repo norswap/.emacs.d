@@ -15,15 +15,15 @@ C-x C-s     : save buffer
 C-x C-w     : save buffer as different file
 C-x k       : close buffer
 C-x b       : switch to another buffer
-C-x C-v     : find alternative file (use to reload from disk)    
+C-x C-v     : find alternative file (use to reload from disk)
 C-x C-b     : list of buffers & operations on them
     % TODO(norswap): how to use this effectively
 
-M-~         : (not-modified) mark buffer as not modified
+M-~         : mark buffer as not modified (doesn't work on US Intl. keyboard)
 C-x C-q     : toggle buffer read-only
 C-c q       : toggle auto-fill mode (mine)
 
-% ---- Windows -----------------------------------------------------------------
+% ---- Windows & Frames --------------------------------------------------------
 
 C-x 0       : close this window
 C-x 1       : close other windows
@@ -32,9 +32,17 @@ C-x 3       : split window horizontally
 
 C-x 4 0     : close this window and kill its buffer
 C-x 4 k     : close next window and kill its buffer
+C-x 4 j     : close this window and kill its buffer (mine)
 
 C-x 5 0     : close this frame
-TODO
+
+C-x o       : go to next window
+C-x 5 o     : go to next frame
+
+C-x 4 b     : open buffer in new window
+C-x 4 f     : open file in new window
+C-x 5 b     : open buffer in new frame
+C-x 5       : open file in new frame
 
 % ---- Moving Point & Buffer ---------------------------------------------------
 
@@ -42,8 +50,8 @@ M-g M-g : move to line
 M-m     : move to first non blank character
 C-a     : move to begin of line
 C-e     : move to end of line
-M-<     : move to beginning of buffer
-M->     : move to end of buffer
+M-<     : move to top/beginning of buffer
+M->     : move to bottom/end of buffer
 
 C-b     : move backward one character
 C-f     : move forward one character
@@ -58,20 +66,13 @@ pg dn   : move backward one screen          (alt: C-v)
 C-M-v   : move forward one screen on other window
 S-C-M-v : move backward screen other window
 
-M-<     : move to top of buffer
-M->     : move to bottom of buffer
-
-C-l     : center view on current line
-C-0 C-l : view with current line at the top (alt: C-u 0 C-l)
-C-- C-l : view with curernt line at bottom  (alt: C-u - C-l)
+C-l     : make current line center/top/bottom (cycle)
 
 % ---- Selecting ---------------------------------------------------------------
 
 C-x h   : select entire buffer
 C-spc   : set mark
 C-x C-x : invert mark and point
-C-q C-l : insert a formfeed (ASCII 12, control-L) that delimitate "pages" in emacs
-C-x C-p : select current-page
 
 % ---- Deleting & Copying ------------------------------------------------------
 
@@ -90,17 +91,20 @@ M-d     : kill word forward
 
 M-u     : upcase word
 M-l     : lowercase word
+M-c     : capitalize word
+
 C-o     : insert newline after point (unlike RET, doesn't switch to next line)
 M-^     : join previous line
 C-u M-^ : join next line
-C-x C-t : swap this line with previous line and move point to begin of next line
-C-x t   : swap chars around point
+C-x C-t : swap this line with previous line and move point after both
+C-t     : swap chars around point and move point after both
 M-o M-s : center line
-M-;     : comment "do what I mean": toggle region comment, add comment to line
+M-;     : with visible selection: toggle region comment
+        : without: add comment at end of line or jump to start of comment
 C-c C-c : comment region (C-modes + globally: mine)
 C-c C-v : uncomment region (mine)
 
-C-w <key> : quoted insert - inserts the type char litteraly
+C-q <key> : quoted insert - inserts the type char litteraly
 
 % ---- Searching ---------------------------------------------------------------
 
@@ -108,6 +112,9 @@ C-s     : incremental search forward (or next result)
 C-r     : incremental search backward (or next result)
 C-M-s   : incremental regex search (or next result)
 M-e     : edit search terms
+M-%     : search and replace (query-replace)
+C-M-%   : search and replace regex (query-replace-regexp)
+
 
 M-s o   : occur = find all occurences of regexp in current buffer
 
@@ -115,6 +122,8 @@ M-x multi-occur :
     same as occur, but in multiple buffers
 M-x multi-occur-in-matching-buffers :
     same as occur, but in all buffers matching a regexp
+
+
 
 % TODO(norswap): more from emacs_old
 
@@ -168,6 +177,41 @@ M-x list-abbrevs
 M-x edit-abbrevs
 M-x write-abbrev-file
 M-x read-abbrev-file
+
+% --- Orgmode ------------------------------------------------------------------
+
+TAB         : cycle expansion modes
+S-TAB       : cycle expansion modes (whole file)
+C-c a       : agenda commands (own)
+
+C-c (C-)f   : next item same level (without C: own)
+C-c (C-)b   : prev item same level (without C: own)
+C-c (C-)u   : upper level (without C: own)
+
+C-c C-d     : toggle checkboxes (- []) & more (org-mode-ctrl-c-ctrl-c)
+
+M-right/left    : shift subtree level
+M-up/down       : reorder subtrees
+
+C-c C-x C-a     : archive entry
+C-c C-x C-s     : archive subtree
+
+C-c C-w         : refile entry
+C-c C-z         : take logbook note
+
+C-c C-l         : edit link
+C-c l           : org-store-link
+C-c C-o         : follow link
+C-c &           : back to previous location(s)
+
+-- % Unused % --
+
+C-c C-x ;       : start timer
+C-c C-x 0       : start a relative timer
+    start w/ offset : C-u C-c C-x 0
+    output time     : C-c C-x .
+    pause/restart   : C-c C-x ,
+    stop timer      : C-u C-c C-x ,
 
 % --- Code ---------------------------------------------------------------------
 

@@ -11,8 +11,6 @@
 
 ;;;;; PACKAGES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-; TODO
-
 (add-to-list 'load-path (concat user-emacs-directory "lib"))
 (require 'livedown) ;; requires npm install -g livedown
 (require 'toggle-letter-case)
@@ -174,16 +172,42 @@ Emacs, by setting process-list to nil before exiting."
 
 ;;;; FONTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Fonts are GUI only.
+
 ;; This font is used notably in TeX's verbatim blocks.
 (set-face-attribute 'fixed-pitch nil :height 90 :family "Courier New")
 
+;; NOTE: Ideally fonts would be set like this on macOS.
+;; However, (font-family-list) is nil when this file is read on macOS.
+;; Calling set-frame-font directly does not work either.
+;; ---
+;; (when (eq system-type 'darwin)
+;;  (when (member "Monaco" (font-family-list))
+;;    (set-frame-font "Monaco 14" nil t)))
+
 (when (eq system-type 'darwin)
-   ;; GUI-only (but set to console font)
-   (set-face-attribute 'default nil
-                       :family "Monaco" :height 120 :weight 'normal)
-   ;; Set height accordingly.
-   (set-face-attribute 'fixed-pitch nil
-                       :height 120 :family "Courier New"))
+  (set-face-attribute 'default nil
+                      :family "Monaco" :height 140 :weight 'normal))
+
+(when (eq system-type 'windows-nt)
+  (when (member "Consolas" (font-family-list))
+    (set-frame-font "Consolas 12" nil t)))
+
+;; Other cool fonts: Hack (++), Fira Code (cool ligatures, but currently
+;; unsupported by emacs out of the box), DejaVu Sans Mono, Office Code Pro (bit
+;; fat), Inconsolata (thin looking).
+
+;; from http://ergoemacs.org/emacs/emacs_list_and_set_font.html
+;; link includes font download link
+(set-fontset-font
+ t
+ '(#x1f300 . #x1fad0)
+ (cond
+  ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
+  ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
+  ((member "Segoe UI Emoji" (font-family-list)) "Segoe UI Emoji")
+  ((member "Symbola" (font-family-list)) "Symbola")
+  ((member "Apple Color Emoji" (font-family-list)) "Apple Color Emoji")))
 
 ;;;; THEME ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -354,6 +378,10 @@ killed or yanked) from the kill ring."
 (norswap-key (kbd "<wheel-up>") (lambda () (interactive) (scroll-down 5)))
 (norswap-key (kbd "<wheel-down>") (lambda () (interactive) (scroll-up 5)))
 
+;; Let C-z work in minibuffer and minibuffer completions.
+(define-key minibuffer-local-map (kbd "C-z") 'undo)
+(define-key ido-common-completion-map (kbd "C-z") 'undo)
+
 ;;;; ENCODING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; If the coding system of a file cannot be determined and utf-8 is a
@@ -406,6 +434,7 @@ killed or yanked) from the kill ring."
  delete-old-versions t  ;; rotate backups
  kept-old-versions 1    ;; keep the oldest version (e.g. pristine config)
  kept-new-versions 10   ;; keep 10 most recent versions
+ vc-make-backup-files t ;; backup files under version control as well
  )
 
 ;; All files are autosaved in user-emacs-directory/autosave.
@@ -414,8 +443,9 @@ killed or yanked) from the kill ring."
 (setq auto-save-list-file-prefix (concat autosave-dir "/"))
 (setq auto-save-file-name-transforms `((".*" ,autosave-dir t)))
 
-;; By default, saves after 30 seconds of idle time, only if there has been more
-;; than 300 input events. (auto-save-timeout, auto-save-interval)
+;; auto save every 20 characters typed (this is the minimum)
+;; (or, by default, after 30 seconds of idle time: auto-save-timeout)
+(setq auto-save-interval 20)
 
 ;;;; MAJOR-MODES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -496,9 +526,7 @@ killed or yanked) from the kill ring."
   ;; emacs uses local sockets and the variable `server-socket-dir` is used.
   ;; I could try to uniformize this, but everything works as-is, and I'm loath
   ;; to spend time trying to debug finicy startup issues.
-  (setq server-auth-dir (car desktop-path))
-
-  (set-face-attribute 'default nil :font "Consolas 9"))
+  (setq server-auth-dir (car desktop-path)))
 
 ;;;; OSX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -551,6 +579,86 @@ killed or yanked) from the kill ring."
 
 ;; Also see C-c C-a (TeX-command-run-all) to get everything done.
 
+;;;; ORGMODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(with-eval-after-load 'org
+    ;; Keep spacing around lines in outline.
+    (setq org-cycle-separator-lines 1)
+
+    ;; Indent mode by default.
+    (add-hook 'org-mode-hook 'org-indent-mode)
+
+    ;; Wrap long lines (necessary for multiline headings).
+    ;; Will display nicely with org-indent-mode.
+    (add-hook 'org-mode-hook 'visual-line-mode)
+
+    ;; Disable auto-fill since we allow long lines.
+    (add-hook 'org-mode-hook (lambda () (auto-fill-mode -1)))
+
+    ;; Start showing everything in the file (no folding).
+    (setq org-startup-folded 'showeverything)
+
+    (setq org-log-state-notes-into-drawer "LOGBOOK")
+
+    ;; Specify nested headlines as a path (headline1/headline2).
+    (setq org-refile-use-outline-path 'file)
+
+    ;; Consider all headlines of level <= as refile destinations
+    (setq org-refile-targets '((nil . (:maxlevel . 4))))
+
+    ;; Allows refile to create new nodes (/my-new-headline), must confirm.
+    (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+    ;; Save all buffers after archiving (only wanted to save the archive buffer,
+    ;; but seems difficult.
+    (advice-add 'org-archive-subtree :after #'org-save-all-org-buffers)
+
+    ;; C-c C-c is taken by the comment shortcut
+    (define-key org-mode-map (kbd "C-c C-d") 'org-ctrl-c-ctrl-c)
+
+    (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+    (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+
+    ;; TODO customize org-link-abbrev-alist
+    ;; TODO customize org-directory ?
+    ;; TODO https://old.reddit.com/r/emacs/comments/6zv83d/share_your_custom_orgmode_link_types/
+
+    ;; faster than C-c C-f/b/u
+    (define-key org-mode-map (kbd "C-c f") 'org-forward-heading-same-level)
+    (define-key org-mode-map (kbd "C-c b") 'org-backward-heading-same-level)
+    (define-key org-mode-map (kbd "C-c u") 'outline-up-heading)
+)
+
+;;;; MESSAGES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun suppress-messages (old-fun &rest args)
+  (let ((inhibit-message t))
+    (apply old-fun args)))
+
+;; Avoid "Desktop saved in ..."
+(advice-add 'desktop-save-in-desktop-dir :around #'suppress-messages)
+
+;; Avoid "Mark set"
+(advice-add 'push-mark :around #'suppress-messages)
+
+;; Avoid "Auto save...done"
+(setq auto-save-no-message t)
+
+;; Find who emits an annoying message.
+
+(defun who-called-me? (old-fun format &rest args)
+  (let ((trace nil) (n 1) (frame nil))
+      (while (setf frame (backtrace-frame n))
+        (setf n     (1+ n)
+              trace (cons (cadr frame) trace)) )
+      (apply old-fun (concat "<<%S>>\n" format) (cons trace args))))
+
+;; (advice-add 'message :around #'who-called-me?)
+;; (advice-remove 'message #'who-called-me?)
+
+;; Inhibiting "End of buffer" / "Start of buffer", if desired:
+;; https://lists.gnu.org/archive/html/help-gnu-emacs/2015-12/msg00191.html
+
 ;;;; WORKAROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun workaround-markdown-fontify-buffer-wiki-links-empty ()
@@ -567,6 +675,10 @@ killed or yanked) from the kill ring."
 ;; Variables set by emacs features and via the customization interface.
 ;; I try to only leave stuff here that has to be updated automatically. There
 ;; should be only one instance of these function calls accross the init files.
+
+;; NOTE: Could move this to other file via:
+;; (setq custom-file "~/.emacs-custom.el")
+;; (load custom-file)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -621,6 +733,8 @@ killed or yanked) from the kill ring."
 ;;   simultaneously.
 
 ;; - Look at Casey's .emacs, it might help.
+
+;; - https://prelude.emacsredux.com/en/latest/usage/
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

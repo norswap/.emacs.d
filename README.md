@@ -97,11 +97,11 @@ To install on macOS, run the file `mac/setup.sh`. Here's what it does:
   with it from finder, etc. You should not use `Emacs.app` to open files (which
   depending on versions, either does not work, or does unfortunate stuff like
   opening a new frame (macOS window) each time).
-  
+
 - Add anoter app named `EmacsFinderOpen.app` to your applications. This app can
   be cmd-dragged (or ctrl-dragged if you inverted controls like I did) to the
   Finder's toolbar. There, clicking on it open the Finder's selection in Emacs.
-  
+
 - Add a new "Open with Emacs" service (called "quick action" since macOS
   Catalina) that will notably display when you right-click a file. Can also be
   added to the touchbar.
@@ -134,11 +134,11 @@ context, just use this to investigate possible integrations there.
         --install /usr/bin/editor editor /usr/bin/em 200 \
         --slave /usr/share/man/man1/editor.1.gz editor.1.gz \
             /usr/share/man/man1/emacs.emacs24.1.gz
-            
+
     # edit /etc/security/pam_env.conf to include
       EDITOR DEFAULT=/usr/bin/emw
       VISUAL DEFAULT=/usr/bin/emw
-      
+
     # To edit root files, use "em /sudo::/etc/environment" (for instance).
     # This needs full path, you can also do "sudo emw file" (but it's console).
     em /sudo::/usr/share/applications/emacs24.desktop

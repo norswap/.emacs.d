@@ -81,12 +81,12 @@ FRAMES=${FRAMES:-0}
 if [[ $RUNNING != 0 ]]; then
     EMACS_LOCATION="$(readlink $(which emacs) || which emacs || norswap_not_found)"
     pgrep -f "$EMACS_LOCATION" | awk '{ print $1 }' | xargs kill -9
-fi                      
+fi
 
 # Is emacs running with --daemon or --bg-daemon flag?
 # If yes, then an additional frame is being counted compared to the real count.
 pgrep -if "emacs.*daemon" > /dev/null && FRAMES=$((FRAMES - 1))
-
+##
 # Emacs is visible if there are visible frames.
 VISIBLE=$([[ "$FRAMES" -gt 0 ]]; echo $?)
 
@@ -116,18 +116,18 @@ if [[ $RUNNING != 0 ]]; then
     # The daemon is not running, start the daemon and open a frame.
     # echo 1 emacsclient $N $T -a '' -c -F "$F" "${ARGS[@]}" >> /tmp/debugem
     emacsclient $N $T -a '' -c -F "$F" "${ARGS[@]}" 2> /tmp/emacs-startup
-    
+
 elif [[ $VISIBLE != 0 ]]; then
     # Pre-active in case of prompt in Emacs.
-    osascript -e 'activate application "Emacs"'
-    
+    [[ "$T"=="-t" ]] || osascript -e 'activate application "Emacs"'
+
     # There are no visible frames, open one.
     # echo 2 emacsclient $N $T -c -F "$F" "${ARGS[@]}" >> /tmp/debugem
     emacsclient $N $T -c -F "$F" "${ARGS[@]}"
 else
     # Pre-activate in case of prompt in Emacs.
-    osascript -e 'activate application "Emacs"'
-    
+    [[ "$T"=="-t" ]] || osascript -e 'activate application "Emacs"'
+
     # echo 3 emacsclient $N $T "${ARGS[@]}" >> /tmp/debugem
     emacsclient $N $T "${ARGS[@]}"
 fi
