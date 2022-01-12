@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/norswap/.emacs.d/elpa/exec-path-from-shell-20201105.419/exec-path-from-shell.el  -*- no-byte-compile: t -*-
+(define-package "exec-path-from-shell" "20201105.419" "Get environment variables such as $PATH from the shell" '((emacs "24.1")) :commit "ad68d367475e698cee043df3af160d85d5fa29e4" :keywords '("unix" "environment") :authors '(("Steve Purcell" . "steve@sanityinc.com")) :maintainer '("Steve Purcell" . "steve@sanityinc.com") :url "https://github.com/purcell/exec-path-from-shell")
