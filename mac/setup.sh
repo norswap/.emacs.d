@@ -10,7 +10,7 @@
 ### Setup ###
 
 # cd to the directory containing this script
-cd "$(realpath "$0")"
+cd "$(dirname "$(realpath "$0")")"
 
 # The directory where you want to install the emacs launchers.
 BINDIR=~/bin
@@ -18,13 +18,16 @@ BINDIR=~/bin
 ### Helper Functions ###
 
 install() {
-    ln -sn $ARG "$(realpath "$1")" "$2"
+    ln -snf "$(realpath "$1")" "$2"
+}
+
+install_exec_name() {
+    install "$1" "$2"
+    chmod +x "$2"
 }
 
 install_exec() {
-    local LINK="$BINDIR/$(basename "$1")"
-    install "$1" "$LINK"
-    chmod +x "$LINK"
+    install_exec_name "$1" "$BINDIR/$(basename "$1")"
 }
 
 compile_app() {
@@ -49,10 +52,10 @@ compile_app() {
 
 install .. ~/.emacs.d
 
-install_exec ../em
-install_exec ../emw
+install_exec_name ../em-macos.sh $BINDIR/em
+install_exec_name ../emw-macos.sh $BINDIR/emw
 
 compile_app ~/".emacs.d/setup/Em.scpt" droplet
 compile_app ~/".emacs.d/setup/EmacsFinderOpener.scpt" applet
 
-install_service ~/.emacs.d/setup/'Open with Emacs.workflow'
+# install_service ~/.emacs.d/setup/'Open with Emacs.workflow'
