@@ -6,7 +6,24 @@ C-g             : cancel
 C-x g           : select minibuffer (mine)
 C-x z           : repeat most recent command (then again with 'z')
 
-undoing: see undo-tree below
+% --- Useful Minor Modes -------------------------------------------------------
+
+--- IDO
+
+C-j     : use string verbatim
+C-e     : edit string
+
+--- undo-tree
+
+C-z     : undo      (mine, alt: C-_, C-x u)
+C-Z     : redo      (mine, alt: M-_)
+C-x u   : visualize undo tree
+    p,n : previous/next (top/down)
+    b,f : previous/next branch (on parent)
+      d : diff mode
+      t : timestamps
+
+Note: if a region is selection, will limit to that region.
 
 % ---- Buffer ------------------------------------------------------------------
 
@@ -115,6 +132,14 @@ M-e     : edit search terms
 M-%     : search and replace (query-replace)
 C-M-%   : search and replace regex (query-replace-regexp)
 
+M-x re-builder : build a regex
+    C-c C-q : exit
+    C-c C-s : next match
+    C-c C-r : prev match
+    C-c C-e : only highlight capturing group
+    C-c C-w : copy/convert regex to elisp regex string
+    C-c C-i : toggle case sensitivity (not working)
+    C-c TAB: switch syntax mode (unused)
 
 M-s o   : occur = find all occurences of regexp in current buffer
 
@@ -135,23 +160,6 @@ C-u M-! <command>   : insert M-! output at point
 M-: <expr>          : evaluate elisp expression
 C-u M-: <expr>:     : insert M-: output at point
 
-% --- Useful Minor Modes -------------------------------------------------------
-
---- IDO
-
-C-j     : use string verbatim
-C-e     : edit string
-
---- undo-tree
-
-C-z     : undo      (mine, alt: C-_, C-x u)
-C-Z     : redo      (mine, alt: M-_)
-C-x u   : visualize undo tree
-    p,n : previous/next (top/down)
-    b,f : previous/next branch (on parent)
-      d : diff mode
-      t : timestamps
-
 % --- Display ------------------------------------------------------------------
 
 C-x C-+ : increase font size
@@ -165,7 +173,31 @@ C-x n w : widen to whole buffer
 C-h m : view active modes
 C-h l : command history
 
+C-h b               : active key bindings
+C-h c               : info about key binding (brief, in minibuffer)
+C-h k               : info about key binding (with fun doc, in new window)
+
+# --- Bookmarks ----------------------------------------------------------------
+
+C-x r m     : set a bookmark at the current location
+C-x r b     : jump to a bookmark
+C-x r l     : list your bookmarks
+    d + x to delete
+    r to rename
+    o to open in another window and switch to it
+    C-o to open in another window (but don't switch)
+
+M-x bookmark-delete: delete a bookmark by name
+
+It is also possible to add annotations (just text notes) on bookmarks, but I
+don't see the use.
+
+Bookmarks are store in the file from =bookmarks-default-file=, and auto-saved
+if =bookmark-save-flag= is 1.
+
 % --- Abbrevs ------------------------------------------------------------------
+
+TODO: actually learn the use for this
 
 C-x a g     : define abbrev for word before point (add global)
 C-x a l     : idem, major-mode specific (add local)
@@ -184,13 +216,22 @@ TAB         : cycle expansion modes
 S-TAB       : cycle expansion modes (whole file)
 C-c a       : agenda commands (own)
 
+C-ret       : new item at same level (after content if in content)
+M-ret       : new item at same level (before content if in content)
+              (will be newline separated if current item is preceded by newline)
+
+M-up/down   : move subtree up/down
+
+C-c *       : turn line/list item into headline
+
 C-c (C-)f   : next item same level (without C: own)
 C-c (C-)b   : prev item same level (without C: own)
 C-c (C-)u   : upper level (without C: own)
 
 C-c C-d     : toggle checkboxes (- []) & more (org-mode-ctrl-c-ctrl-c)
 
-M-right/left    : shift subtree level
+M-right/left    : shift heading level (works with region)
+M-S-righ-left   : shift subtree level
 M-up/down       : reorder subtrees
 
 C-c C-x C-a     : archive entry
@@ -204,6 +245,10 @@ C-c l           : org-store-link
 C-c C-o         : follow link
 C-c &           : back to previous location(s)
 
+C-c .           : insert timestamp
+
+C-c C-,         : insert code block or other structure
+
 -- % Unused % --
 
 C-c C-x ;       : start timer
@@ -213,9 +258,76 @@ C-c C-x 0       : start a relative timer
     pause/restart   : C-c C-x ,
     stop timer      : C-u C-c C-x ,
 
+% --- Magit --------------------------------------------------------------------
+
+C-x m           : open magit for current repo (own)
+g               : refresh buffer
+G               : refresh all buffers
+h               : help (popup of popups)
+TAB             : expand/collapse
+S-TAB           : expand/collapse all
+RET             : view details (opens new window)
+n/p             : next/previous section
+;               : up section (mine)
+q               : bury (hide) buffer (and its window if it was spawned by magit)
+C-u q           : kill buffer
+C-u C-u q       : kill all buffers for the same repo
+C-x             : (on popups): operations
+C-x s           : set (on current buffer)
+D               : diff options for buffer
++/-             : (on diff views) merge/split hunks
+M-1/2/3/4       : expand to selected level
+
+% --- Calc ---------------------------------------------------------------------
+
+C-x * c         : start calc
+C-x * x         : exit calc
+C-x * g         : grab region, evaluate it and push it to calc
+C-x * e         : calc embedded mode (useful to reduce values in region)
+                  emit again to exit
+
+in calc
+    RET         : duplicate top entry (with prefix: duplicate n top entries)
+    C-j         : same (with prefix: duplicate nth top entry)
+    DEL         : remove top entry (with prefix: remove n top entries)
+    M-DEL       : same (with prefix: remove nth top entry)
+    TAB         : roll n items downwards
+                  (default 2, 0 = reverse stack, negative: rotate whole stack)
+                  (can be seen as a way to move top of stack to position n)
+    M-TAB       : roll n items upwards (default: 3, same)
+    '           : enter algebraic formula (e.g. exponent, or sqrt, or variable)
+    s 0-9       : save variable (quick variables q0-q9) (leave on stack)
+    s s         : save variable (leave on stack)
+    s t         : save variable (pop from stack)
+    s t 0-9     : save variable (quick variables q0-q9) (pop from stack)
+    s s <v>=<expr> : another way to assign
+    s x         : exchange variable and top of stack
+    s r         : recall variable
+    s r 0-9     : recall quick variable (q0-q9)
+    s i         : insert list of variable bindings in buffer
+    s u         : clear variable
+    =           : evaluate formula (will substitute variables)
+
+    C-k         : kill value
+    M-w         : copy value (mine)
+
+TODO
+C-x * e         : enter embedded mode
+
+https://www.gnu.org/software/emacs/manual/html_node/calc/Basic-Embedded-Mode.html#Basic-Embedded-Mode
+
+% --- Cua-Rectangle-Mark-Mode --------------------------------------------------
+
+C-x r ;         : start cua-rectangle-mark-mode (mine)
+                  look at the modeline for many useful commands (M- based)
+                  use char-based movement commands to expand/shrink
+    RET         : cycle expansion corner
+
 % --- Code ---------------------------------------------------------------------
 
 M-x electric-indent-mode    : toggle automatic indents
+M-.                         : jump to definition
+M-,                         : jump back from (jump to definition)
 
 % --- Latex --------------------------------------------------------------------
 
@@ -242,3 +354,6 @@ M-x diff-buffer-with-file
 C-x RET f : encoding/newlines for saving file (e.g. dos/unix/utf-8-unix)
 
 % ------------------------------------------------------------------------------
+TODO
+
+C-x C-l : downcase region

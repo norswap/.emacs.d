@@ -4,8 +4,7 @@
 
 (setq package-archives '(
     ("gnu"          . "http://elpa.gnu.org/packages/")
-    ;("marmalade"    . "http://marmalade-repo.org/packages/")
-    ("melpa"        . "http://melpa.milkbox.net/packages/")))
+    ("melpa"        . "http://melpa.org/packages/")))
 
 (package-initialize)
 
@@ -116,6 +115,10 @@ Emacs, by setting process-list to nil before exiting."
 ;; Same for initial *scratch*.
 (setq initial-major-mode 'text-mode)
 
+;; Don't require double-backlash-escaping in M-x re-builder.
+(eval-after-load 're-builder
+  (setq reb-re-syntax 'string))
+
 ;;;; COMPLETION ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Using ido and smex for minibuffer completion almost everywhere.
@@ -174,9 +177,6 @@ Emacs, by setting process-list to nil before exiting."
 
 ;; Fonts are GUI only.
 
-;; This font is used notably in TeX's verbatim blocks.
-(set-face-attribute 'fixed-pitch nil :height 90 :family "Courier New")
-
 ;; NOTE: Ideally fonts would be set like this on macOS.
 ;; However, (font-family-list) is nil when this file is read on macOS.
 ;; Calling set-frame-font directly does not work either.
@@ -186,12 +186,16 @@ Emacs, by setting process-list to nil before exiting."
 ;;    (set-frame-font "Monaco 14" nil t)))
 
 (when (eq system-type 'darwin)
-  (set-face-attribute 'default nil
-                      :family "Monaco" :height 140 :weight 'normal))
+  (set-face-attribute 'default nil :family "Monaco" :height 140 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil :height 150 :weight 'bold :family "Courier New"))
 
 (when (eq system-type 'windows-nt)
   (when (member "Consolas" (font-family-list))
-    (set-frame-font "Consolas 12" nil t)))
+    (set-frame-font "Consolas 12" nil t))
+  (set-face-attribute 'fixed-pitch nil :height 90 :family "Courier New"))
+
+;; NOTE: fixed-pitch: This font is used notably in TeX's verbatim blocks &
+;; markdown's code blocks.
 
 ;; Other cool fonts: Hack (++), Fira Code (cool ligatures, but currently
 ;; unsupported by emacs out of the box), DejaVu Sans Mono, Office Code Pro (bit
@@ -321,6 +325,7 @@ killed or yanked) from the kill ring."
   "Toggle trailing whitespace handling mode. When 'handled',
   trailing whitespace is deleted on save."
   (interactive)
+  (setq show-trailing-whitespace (not show-trailing-whitespace))
   (setq handle-trailing-whitespace (not handle-trailing-whitespace))
   (force-window-update (window-buffer))
   (redisplay t))
@@ -373,6 +378,9 @@ killed or yanked) from the kill ring."
 (norswap-key (kbd "C-c C-v") 'uncomment-region)
 (norswap-key (kbd "C-c w")   'delete-region)
 (norswap-key (kbd "M-l")     'toggle-letter-case)
+(norswap-key (kbd "C-c l")   'org-store-link)
+(norswap-key (kbd "C-x m")   'magit)
+(norswap-key (kbd "C-x r ;") 'cua-rectangle-mark-mode)
 
 ;; Sane mouse scrolling (that does not accelerate to oblivion).
 (norswap-key (kbd "<wheel-up>") (lambda () (interactive) (scroll-down 5)))
@@ -409,7 +417,6 @@ killed or yanked) from the kill ring."
   (unless (file-exists-p dirname)
     (make-directory dirname))
   (setq desktop-path `(,dirname)))
-
 
 ;; Save the session (open buffers) between emacs invocations.
 (desktop-save-mode)
@@ -526,7 +533,17 @@ killed or yanked) from the kill ring."
   ;; emacs uses local sockets and the variable `server-socket-dir` is used.
   ;; I could try to uniformize this, but everything works as-is, and I'm loath
   ;; to spend time trying to debug finicy startup issues.
-  (setq server-auth-dir (car desktop-path)))
+  (setq server-auth-dir (car desktop-path))
+
+  ;; Ignore ACLs on WSL. WSL does not provide an ACL, but emacs expects there to
+  ;; be one before saving any file. Without this advice, files on WSL can not be
+  ;; saved.
+  (defun ignore-wsl-acls (orig-fun &rest args)
+    (if (string-match-p "^//wsl" (car args))
+        (progn (message "ignoring wsl acls") "")
+      (apply orig-fun args)))
+
+  (advice-add 'file-acl :around 'ignore-wsl-acls))
 
 ;;;; OSX ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -610,14 +627,15 @@ killed or yanked) from the kill ring."
     (setq org-refile-allow-creating-parent-nodes 'confirm)
 
     ;; Save all buffers after archiving (only wanted to save the archive buffer,
-    ;; but seems difficult.
+    ;; but seems difficult).
     (advice-add 'org-archive-subtree :after #'org-save-all-org-buffers)
 
     ;; C-c C-c is taken by the comment shortcut
     (define-key org-mode-map (kbd "C-c C-d") 'org-ctrl-c-ctrl-c)
 
     (define-key org-mode-map (kbd "C-c a") 'org-agenda)
-    (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+
+    ;; See also norswap-key: C-c l is bound to org-store-link.
 
     ;; TODO customize org-link-abbrev-alist
     ;; TODO customize org-directory ?
@@ -627,7 +645,31 @@ killed or yanked) from the kill ring."
     (define-key org-mode-map (kbd "C-c f") 'org-forward-heading-same-level)
     (define-key org-mode-map (kbd "C-c b") 'org-backward-heading-same-level)
     (define-key org-mode-map (kbd "C-c u") 'outline-up-heading)
-)
+
+    ; active Babel languages
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((shell . t) (ruby . t) (makefile . t) (C . t) (java . t) (js . t)
+       (python . t))))
+
+;;;; MAGIT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(with-eval-after-load 'magit
+  ;; Removes the magit status line showing the latest tag on the branch.
+  (define-key magit-mode-map (kbd ";") 'magit-section-up)
+  ;; Note: using (kbd "S-TAB") does not properly override the previous binding!
+  (define-key magit-mode-map (kbd "<backtab>") 'magit-section-cycle)
+  (define-key magit-mode-map (kbd "M-w") 'magit-copy-section-value)
+  (remove-hook 'magit-status-headers-hook 'magit-insert-tags-header))
+
+;; https://stackoverflow.com/questions/6837511/
+(add-hook 'term-mode-hook 'my-inhibit-global-linum-mode)
+
+(defun my-inhibit-global-linum-mode ()
+  "Counter-act `global-linum-mode'."
+  (add-hook 'after-change-major-mode-hook
+            (lambda () (linum-mode 0))
+            :append :local))
 
 ;;;; MESSAGES ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -659,6 +701,35 @@ killed or yanked) from the kill ring."
 ;; Inhibiting "End of buffer" / "Start of buffer", if desired:
 ;; https://lists.gnu.org/archive/html/help-gnu-emacs/2015-12/msg00191.html
 
+;; Avoid warnings about unsafe local variables when using the listed
+;; variable-value pairs.
+(mapc (lambda (it) (add-to-list 'safe-local-variable-values it))
+      '((org-export-in-background . t)
+        (after-save-hook . org-html-export-to-html)))
+
+;;;; ESHELL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(add-hook 'eshell-mode-hook (lambda ()
+    (setq handle-trailing-whitespace nil)
+    (setq show-trailing-whitespace nil)))
+
+;; To find faces & values, use M-x customize-groupe RET term RET & extract
+;; from custom-set-faces in this file.
+;; (set-face-attribute 'term-color-blue nil
+;;                     :background "SkyBlue1"
+;;                     :foreground "SkyBlue1")
+
+;;;; CALC ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun copy-calc-top (nn)
+  "Copy the thing at the top of the calc stack."
+  (interactive "P")
+  (calc-kill nn t))
+
+;; Somehow eval-after-load won't do here (error about calc-mode-map being undefined).
+(with-eval-after-load 'calc
+    (define-key calc-mode-map (kbd "M-w") #'copy-calc-top))
+
 ;;;; WORKAROUNDS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun workaround-markdown-fontify-buffer-wiki-links-empty ()
@@ -686,15 +757,7 @@ killed or yanked) from the kill ring."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (color-theme-modern python-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell cmake-mode clojure-mode buffer-move auctex ace-jump-mode))))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+   '(gnu-elpa-keyring-update org-preview-html impatient-mode magit color-theme-modern python-mode websocket web-server vagrant-tramp uuidgen undo-tree unbound smex reveal-in-osx-finder markdown-mode lua-mode lacarte ido-yes-or-no ido-vertical-mode ido-ubiquitous highlight-parentheses flymd flx-ido exec-path-from-shell cmake-mode clojure-mode buffer-move ace-jump-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -742,3 +805,9 @@ killed or yanked) from the kill ring."
 ;; Emacs custom system. Move it somewhere else!
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
