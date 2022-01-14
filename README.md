@@ -84,7 +84,7 @@ Full list of scripts:
   never use, and I literally just forked it from the MSYS version, for the sake
   of completeness.
 
-- `em[w]-msys.sh`: for Windows running Unix-like environment (like MSYS) (2)
+- `em[w]-msys.sh`: for Windows running Unix-like environment (like MSYS)
 
   The `emw` script here does **not** call the related `em` script (instead it's
   a copy, just like in the .bat case). The reason is that I use `emw-msys.sh` as
@@ -92,7 +92,7 @@ Full list of scripts:
   Bash, which is MSYS), and I can't assume that the `em` in the PATH will map to
   `em-msys.bat`.
 
-- `em[w]-wsl.sh`: for Linux running insise Windows WSL (3), to run with
+- `em[w]-wsl.sh`: for Linux running inside Windows WSL, to run with
   a daemon running on the Windows side.
 
   For this to work, you will need to set some variable, i.e. `$WINDOWS_HOME`
