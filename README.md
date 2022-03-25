@@ -80,9 +80,26 @@ Full list of scripts:
 
 - `em[w]-linux.sh`: for Linux
 
-  I probably should implement the `-t` flag here, but this is the one version I
-  never use, and I literally just forked it from the MSYS version, for the sake
-  of completeness.
+  For linux, but also supports a specific [WSL] use case: calling emacs from
+  Linux/WSL to open a file on a daemon running on the Windows side.
+
+  [WSL]:
+
+  For the WSL support to work, you will need to set some variable, i.e.
+  `$WINDOWS_HOME` (the Windows directory that contains `.emacs.d`, as a
+  Windows-style path (forward slashes are okay, e.g. `C:/Users/norswap`),
+  `$USERDOMAIN` (to your Windows hostname) and `$USERNAME` (to your Windows
+  usernmae), e.g. in your `.bashrc`. This is so we can locate the server file
+  for emacs running on Windows.
+
+  The other divergence to add for WSL support is the necessity to translate
+  Unix-style paths like `/mnt/c/folder/file` or `/home/norswap/file` to
+  Windows-style paths like `C:\folder\file` or
+  `\\wsl.localhost\Ubuntu\home\norswap\file`. It turns out this is mildly
+  difficult if you want to handle files that do not exist, and so as a side
+  effect, the script will create the dir structure of non-existant buffer (e.g.
+  `em a/b/c` will create dirs `a` and `b` if they don't yet exist — which
+  normally emacs would only do if you save the file).
 
 - `em[w]-msys.sh`: for Windows running Unix-like environment (like MSYS)
 
@@ -91,23 +108,6 @@ Full list of scripts:
   the value of the git `core.editor` property (where it will be invoked by Git
   Bash, which is MSYS), and I can't assume that the `em` in the PATH will map to
   `em-msys.bat`.
-
-- `em[w]-wsl.sh`: for Linux running inside Windows WSL, to run with
-  a daemon running on the Windows side.
-
-  For this to work, you will need to set some variable, i.e. `$WINDOWS_HOME`
-  (the Windows dir that contains `.emacs.d`, as a Linux-style WSL path, e.g. `
-  /mnt/c/Users/norswap`), `$USERDOMAIN` (to your Windows hostname) and
-  `$USERNAME` (to your Windows hostname), e.g. in your `.bashrc`. This is so we
-  can locate the server file for emacs running on Windows.
-
-  The main divergence with with the Unix script here is the necessity to
-  translate Unix-style paths like `/mnt/c/folder/file` or `/home/norswap/file`
-  to Windows-style paths like `C:\folder\file` or
-  `\\wsl.localhost\Ubuntu\home\norswap\file`. It turns out this is mildly
-  difficult if you want to handle files that do not exist, and so as a side
-  effect, the script will create the dir structure of non-exist files (e.g. `em
-  a/b/c` will create dirs `a` and `b` if they don't yet exist).
 
 ## The Emacs Server
 
